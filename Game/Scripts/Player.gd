@@ -67,6 +67,10 @@ func _process(delta):
 	_set_aim_direction()
 	_set_cooldown()
 	_do_animations(delta)
+	_set_eye_position()
+	
+func _set_eye_position():
+	Eye.global_position = self.global_position + (EYE_DISTANCE * aim_direction)
 
 func _set_cooldown():
 	in_cooldown = not Cooldown.is_stopped()
