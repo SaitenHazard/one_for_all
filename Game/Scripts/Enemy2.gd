@@ -3,9 +3,10 @@ extends RigidBody2D
 const WALK_VELOCITY : float  = 200.0
 const AIR_VELOCITY : float  = 150.0
 const AIR_DEACCEL : float  = 800.0
-const JUMP_VELOCITY : float  = 600.0
+const JUMP_VELOCITY : float  = 200.0
 const MAX_FLOOR_AIRBORNE_TIME : float  = 0.15
 const BULLET_ACCEL  : float = 800.0
+const COOLDOWN_TIME  : float = 0.55
 
 var airborne_time = 1e20
 var body_state
@@ -15,6 +16,11 @@ var linear_velocity_var : Vector2
 var linear_velocity_previous : Vector2
 var hit_ground : bool
 var walk_direction : float = 1.0
+var dead : bool = false
+var lives : int = 1
+var jump : bool = false
+var got_hit : bool = false
+var bullet_velocity_sign : int = 0
 
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
@@ -25,16 +31,21 @@ var test : bool
 
 func _process(delta):
 	_do_animations(delta)
+	_do_death()
+	
+func _do_death():
+	if got_hit == false and lives == 0 and on_floor == true and jump == false:
+		self.queue_free()
 
 func _do_animations(delta) -> void:
 	var scale_lerp : Vector2
-	
+
 	if walk_direction > 0:
 		Sprite_var.flip_h = true
 	else:
 		Sprite_var.flip_h = false
 	
-	if not on_floor:
+	if not on_floor or got_hit:
 		hit_ground = false
 
 		scale_lerp.x = range_lerp(abs(linear_velocity_var.y), 0, abs(JUMP_VELOCITY), 1.25, 0.75)
@@ -65,6 +76,10 @@ func _set_body_state():
 	
 func _set_velocity():
 	on_floor = airborne_time < MAX_FLOOR_AIRBORNE_TIME
+
+	if got_hit:
+		linear_velocity_var.x = WALK_VELOCITY * bullet_velocity_sign
+		
 	linear_velocity_var += body_state.get_total_gravity() * step
 	body_state.set_linear_velocity(linear_velocity_var)
 
@@ -78,17 +93,19 @@ func _find_floor():
 		if contact_normal.dot(Vector2(0, -1)) > 0.6:
 			found_floor = true
 			floor_index = x
-			
-		if contact_normal.x > 0.9:
-			walk_direction = 1.0
-		elif contact_normal.x < -0.9:
-			walk_direction = -1.0
-
-	if not RayCast2DRight.is_colliding() and RayCast2DLeft.is_colliding():
-		walk_direction = -1.0
 		
-	if RayCast2DRight.is_colliding() and not RayCast2DLeft.is_colliding():
-		walk_direction = 1.0
+		if body_state.get_contact_collider_object(x).is_in_group('tile'):
+			if contact_normal.x > 0.9:
+				walk_direction = 1.0
+			elif contact_normal.x < -0.9:
+				walk_direction = -1.0
+
+	if not got_hit:
+		if not RayCast2DRight.is_colliding() and RayCast2DLeft.is_colliding():
+			walk_direction = -1.0
+			
+		if RayCast2DRight.is_colliding() and not RayCast2DLeft.is_colliding():
+			walk_direction = 1.0
 
 	if found_floor:
 		airborne_time = 0.0
@@ -97,8 +114,11 @@ func _find_floor():
 
 func _move_floor():
 	if on_floor:
+		if jump:
+			linear_velocity_var.y = -JUMP_VELOCITY
+			jump = false
+		
 		linear_velocity_var.x = WALK_VELOCITY * walk_direction
-			
 		linear_velocity_previous = linear_velocity_var
 		
 func _move_air():
@@ -112,7 +132,16 @@ func _move_air():
 
 func _on_Enemy2_body_entered(body):
 	if body.is_in_group('bullet'):
+		jump = true
+		got_hit = true
+		Cooldown.start(COOLDOWN_TIME)
+		bullet_velocity_sign = sign(body.get_linear_velocity().x)
 		var Utility = preload("res://Scripts/Utility.gd").new()
 		body.queue_free()
 		var child = Utility.reparent(body.get_node('Particles2D'), get_node("/root/MainScene"))
 		Utility.delay_queue_free(child, 0.3)
+		
+		lives = lives - 1
+
+func _on_Cooldown_timeout():
+	got_hit = false

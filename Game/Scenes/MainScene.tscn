@@ -133,7 +133,9 @@ friction = 0.5
 [node name="MainScene" type="Node2D"]
 position = Vector2( 0, -23.7841 )
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="TileMap" type="TileMap" parent="." groups=[
+"tile",
+]]
 tile_set = SubResource( 6 )
 cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 collision_layer = 7
