@@ -26,7 +26,7 @@ color = Color( 0.933333, 0.933333, 0.466667, 1 )
 "bullet",
 ]]
 collision_layer = 2147483650
-collision_mask = 2
+collision_mask = 2147483648
 physics_material_override = SubResource( 1 )
 script = ExtResource( 2 )
 

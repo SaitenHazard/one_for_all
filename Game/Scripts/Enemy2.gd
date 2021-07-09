@@ -7,14 +7,7 @@ const JUMP_VELOCITY : float  = 600.0
 const MAX_FLOOR_AIRBORNE_TIME : float  = 0.15
 const BULLET_ACCEL  : float = 800.0
 
-#var aim_direction : Vector2
-#var opposite_aim_direction : Vector2
 var airborne_time = 1e20
-#var in_cooldown : bool
-#var move_left : bool
-#var move_right : bool
-#var shoot : bool
-
 var body_state
 var step : float
 var on_floor : bool
@@ -105,18 +98,10 @@ func _find_floor():
 func _move_floor():
 	if on_floor:
 		linear_velocity_var.x = WALK_VELOCITY * walk_direction
-#		if walk_direction < 0:
-#			linear_velocity_var.x = -WALK_VELOCITY
-#		else:
-#			linear_velocity_var.x = WALK_VELOCITY
 			
 		linear_velocity_previous = linear_velocity_var
 		
 func _move_air():
-#	if shoot:
-#		linear_velocity_var.y = JUMP_VELOCITY * opposite_aim_direction.y
-#		linear_velocity_var.x = JUMP_VELOCITY * opposite_aim_direction.x
-		
 	if not on_floor:
 		linear_velocity_var.x = 0
 		
@@ -124,3 +109,10 @@ func _move_air():
 			linear_velocity_var.x = -AIR_VELOCITY
 		else:
 			linear_velocity_var.x = AIR_VELOCITY
+
+func _on_Enemy2_body_entered(body):
+	if body.is_in_group('bullet'):
+		var Utility = preload("res://Scripts/Utility.gd").new()
+		body.queue_free()
+		var child = Utility.reparent(body.get_node('Particles2D'), get_node("/root/MainScene"))
+		Utility.delay_queue_free(child, 0.3)
