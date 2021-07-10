@@ -29,6 +29,7 @@ var on_floor : bool
 var linear_velocity_var : Vector2
 var linear_velocity_previous : Vector2
 var hit_ground : bool
+var hit_right
 
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
@@ -180,19 +181,26 @@ func _move_air():
 				linear_velocity_absolute = 0
 			linear_velocity_var.x = sign(linear_velocity_var.x) * linear_velocity_absolute
 
-func _shots_remaining_add():
+func shots_remaining_add():
 	if shots_remaining == shots_max:
 		return
 	shots_remaining = shots_remaining + 1
 	
-func _shots_max_add():
+func shots_max_add():
 	shots_max = shots_max + 1
 
 func _on_Player_body_entered(body):
 	if body.is_in_group('bullet') and shots_remaining < shots_max:
-		_shots_remaining_add()
+		shots_remaining_add()
 		body.queue_free()
 		
 	if body.is_in_group('pickup_slot'):
-		_shots_max_add()
+		shots_max_add()
 		body.queue_free()
+		
+	if body.is_in_group('enemy'):
+		hit_right = self.position.x < body.position.x
+		_do_hit()
+
+func _do_hit():
+	pass

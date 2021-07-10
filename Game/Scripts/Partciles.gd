@@ -1,2 +1,0 @@
-extends Particles2D
-

@@ -1,6 +1,7 @@
-extends RigidBody2D
+extends Area2D
 
-#func _on_Pickup_slot_body_entered(body):
-#	if body.name == 'Player':
-#		body.add_shots_max()
-#		self.queue_free()
+onready var Player = get_node('/root/MainScene/Player')
+
+func _on_Pickup_slot_body_entered(body):
+	Player.shots_max_add()
+	self.queue_free()
