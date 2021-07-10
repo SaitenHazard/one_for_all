@@ -31,5 +31,8 @@ texture = ExtResource( 3 )
 
 [node name="Cooldown" type="Timer" parent="."]
 one_shot = true
+
+[node name="TimerRecoil" type="Timer" parent="."]
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_Player_body_shape_entered"]
+[connection signal="timeout" from="TimerRecoil" to="." method="_on_TimerRecoil_timeout"]

@@ -20,7 +20,7 @@ var dead : bool = false
 var lives : int = 1
 var jump : bool = false
 var got_hit : bool = false
-var bullet_velocity_sign : int = 0
+var hit_right : int = 0
 
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
@@ -78,7 +78,10 @@ func _set_velocity():
 	on_floor = airborne_time < MAX_FLOOR_AIRBORNE_TIME
 
 	if got_hit:
-		linear_velocity_var.x = WALK_VELOCITY * bullet_velocity_sign
+		if hit_right:
+			linear_velocity_var.x = -WALK_VELOCITY
+		else:
+			linear_velocity_var.x = WALK_VELOCITY
 		
 	linear_velocity_var += body_state.get_total_gravity() * step
 	body_state.set_linear_velocity(linear_velocity_var)
@@ -133,18 +136,21 @@ func _move_air():
 func _on_Enemy2_body_entered(body):
 	if body.is_in_group('bullet'):
 		_do_hit(body)
-		
+
 func _do_hit(var body):
 	jump = true
 	got_hit = true
 	Cooldown.start(COOLDOWN_TIME)
-	bullet_velocity_sign = sign(body.get_linear_velocity().x)
+	hit_right = self.position.x < body.position.x
+	_do_hit_bullet(body)
+	
+	lives = lives - 1
+	
+func _do_hit_bullet(body):
 	var Utility = preload("res://Scripts/Utility.gd").new()
 	body.queue_free()
 	var child = Utility.reparent(body.get_node('Particles2D'), get_node("/root/MainScene"))
 	Utility.delay_queue_free(child, 0.3)
-	
-	lives = lives - 1
-		
+
 func _on_Cooldown_timeout():
 	got_hit = false

@@ -7,14 +7,18 @@ const WALK_MAX_VELOCITY : float  = 700.0
 const AIR_ACCEL : float  = 800.0
 const AIR_DEACCEL : float  = 50.0
 const JUMP_VELOCITY : float  = 600.0
+const RECOIL_VERTICAL_VELOCITY : float  = 150.0
+const RECOIL_HORIZONTAL_VELOCITY : float = 300.0
 const MAX_FLOOR_AIRBORNE_TIME : float  = 0.15
 const BULLET_ACCEL  : float = 800.0
 const COOLDOWN  : float = 0.5
 const EYE_DISTANCE : float = 5.0
+const RECOIL_TIME : float = 0.55
 
+var got_hit : bool = false
+var recoil : bool = false
 var shots_max : int = 1
 var shots_remaining : int = shots_max
-
 var aim_direction : Vector2
 var opposite_aim_direction : Vector2
 var airborne_time = 1e20
@@ -34,6 +38,8 @@ var hit_right
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
 onready var Eye : Sprite = $Eye
+onready var TimerRecoil = $TimerRecoil
+
 var Bullet : Object = preload("res://Scenes/Bullet.tscn")
 
 var test : bool
@@ -88,8 +94,19 @@ func _integrate_forces(body_state):
 	_do_shoot()
 	_move_air()
 	_move_floor()
+	_move_recoil()
 	_set_velocity()
 	_find_floor()
+	
+func _move_recoil():
+	if got_hit:
+		if hit_right:
+			linear_velocity_var.x = -RECOIL_HORIZONTAL_VELOCITY
+		else:
+			linear_velocity_var.x = RECOIL_HORIZONTAL_VELOCITY
+			
+		linear_velocity_var.y = -RECOIL_VERTICAL_VELOCITY
+		got_hit = false
 
 func _set_body_state():
 	linear_velocity_var = body_state.get_linear_velocity()
@@ -101,6 +118,9 @@ func _set_velocity():
 	body_state.set_linear_velocity(linear_velocity_var)
 	
 func _do_shoot():
+	if recoil:
+		return
+		
 	if not shoot:
 		return
 	
@@ -114,6 +134,9 @@ func _do_shoot():
 #	add_collision_exception_with(bullet_m)
 
 func _get_input():
+	if recoil:
+		return
+	
 	move_left = Input.is_action_pressed("move_left")
 	move_right = Input.is_action_pressed("move_right")
 	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown 
@@ -143,6 +166,9 @@ func _replenish_min_shots():
 		shots_remaining = MIN_SHOTS_ON_FLOOR
 			
 func _move_floor():
+	if recoil:
+		return
+		
 	if on_floor:
 		if move_left and not move_right:
 			if linear_velocity_var.x > -WALK_MAX_VELOCITY:
@@ -157,8 +183,11 @@ func _move_floor():
 				xv = 0
 			linear_velocity_var.x = sign(linear_velocity_var.x) * xv
 		linear_velocity_previous = linear_velocity_var
-		
+
 func _move_air():
+	if recoil:
+		return
+			
 	if shoot:
 		linear_velocity_var.y = JUMP_VELOCITY * opposite_aim_direction.y
 		linear_velocity_var.x = JUMP_VELOCITY * opposite_aim_direction.x
@@ -199,8 +228,20 @@ func _on_Player_body_entered(body):
 		body.queue_free()
 		
 	if body.is_in_group('enemy'):
-		hit_right = self.position.x < body.position.x
-		_do_hit()
+		_do_hit(body)
+ 
+func _do_hit(var body : Node2D):
+	hit_right = self.position.x < body.position.x
+	recoil = true
+	got_hit = true
+	TimerRecoil.start(RECOIL_TIME)
+#	_do_hit_bullet(body)
+	
+#func _do_hit_bullet(body):
+#	var Utility = preload("res://Scripts/Utility.gd").new()
+#	body.queue_free()
+#	var child = Utility.reparent(body.get_node('Particles2D'), get_node("/root/MainScene"))
+#	Utility.delay_queue_free(child, 0.3)
 
-func _do_hit():
-	pass
+func _on_TimerRecoil_timeout():
+	got_hit = false
