@@ -13,7 +13,7 @@ const MAX_FLOOR_AIRBORNE_TIME : float  = 0.15
 const BULLET_ACCEL  : float = 800.0
 const COOLDOWN  : float = 0.5
 const EYE_DISTANCE : float = 5.0
-const RECOIL_TIME : float = 5.0
+const RECOIL_TIME : float = 1.5
 
 var got_hit : bool = false
 var in_recoil : bool = false
@@ -226,6 +226,7 @@ func _on_Player_body_entered(body):
  
 func _do_hit(var body : Node2D):
 	_set_player_invincible()
+	_do_flash()
 	hit_right = self.position.x < body.position.x
 	in_recoil = true
 	got_hit = true
@@ -240,6 +241,9 @@ func _do_hit(var body : Node2D):
 
 func _on_TimerRecoil_timeout():
 	in_recoil = false
+	
+	yield(get_tree().create_timer(0.5), "timeout")
+	
 	_set_player_vincible()
 
 func _set_player_invincible() -> void:
@@ -255,3 +259,14 @@ func _set_player_vincible() -> void:
 	
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, true)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, true)
+
+func _do_flash():
+	$Sprite.material.set_shader_param("flash_modifier", 1)
+	
+	yield(get_tree().create_timer(0.1), "timeout")
+	
+	$Sprite.material.set_shader_param("flash_modifier", 0.25)
+		
+	yield(get_tree().create_timer(RECOIL_TIME), "timeout")
+		
+	$Sprite.material.set_shader_param("flash_modifier", 0)
