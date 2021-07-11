@@ -33,10 +33,9 @@ var test : bool
 
 func _ready():
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.ENEMY, true)
-#	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.BULLET, true)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PLAYER, true)
-	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, false)
-
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.BULLET, true)
+	
 func _process(delta):
 	_do_animations(delta)
 #	_do_death()
@@ -142,7 +141,6 @@ func _move_air():
 			linear_velocity_var.x = AIR_VELOCITY
 
 func _on_Enemy2_body_entered(body):
-	return
 	if body.is_in_group('bullet'):
 		_do_hit(body)
 
@@ -152,9 +150,14 @@ func _do_hit(var body):
 	Cooldown.start(COOLDOWN_TIME)
 	hit_right = self.position.x < body.position.x
 	_do_hit_bullet(body)
-	
+	_do_flash()
 	lives = lives - 1
-	
+
+func _do_flash():
+	$Sprite.material.set_shader_param("flash_modifier", 1)
+	yield(get_tree().create_timer(0.1), "timeout")
+	$Sprite.material.set_shader_param("flash_modifier", 0)
+
 func _do_hit_bullet(body):
 	body.queue_free()
 	var child = Utility.reparent(body.get_node('Particles2D'), get_node("/root/MainScene"))
@@ -162,3 +165,4 @@ func _do_hit_bullet(body):
 
 func _on_Cooldown_timeout():
 	got_hit = false
+

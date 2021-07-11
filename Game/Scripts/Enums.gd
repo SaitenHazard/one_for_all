@@ -5,4 +5,5 @@ enum COLLISION_LAYER {
 	ENEMY = 1,
 	BULLET = 2,
 	PICKUP = 3,
+	INVINCIBLE = 4,
 }

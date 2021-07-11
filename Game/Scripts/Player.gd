@@ -13,10 +13,10 @@ const MAX_FLOOR_AIRBORNE_TIME : float  = 0.15
 const BULLET_ACCEL  : float = 800.0
 const COOLDOWN  : float = 0.5
 const EYE_DISTANCE : float = 5.0
-const RECOIL_TIME : float = 0.55
+const RECOIL_TIME : float = 5.0
 
 var got_hit : bool = false
-var recoil : bool = false
+var in_recoil : bool = false
 var shots_max : int = 1
 var shots_remaining : int = shots_max
 var aim_direction : Vector2
@@ -47,9 +47,7 @@ var test : bool
 var Utility = preload("res://Scripts/Utility.gd").new()
 
 func _ready():
-	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, true)
-	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, true)
-	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, true)
+	_set_player_vincible()
 
 func _do_animations(delta) -> void:
 	var scale_lerp : Vector2
@@ -98,7 +96,6 @@ func _integrate_forces(body_state):
 	self.body_state = body_state
 	_set_body_state()
 	_get_input()
-	_do_shoot()
 	_move_air()
 	_move_floor()
 	_move_recoil()
@@ -125,12 +122,6 @@ func _set_velocity():
 	body_state.set_linear_velocity(linear_velocity_var)
 	
 func _do_shoot():
-	if recoil:
-		return
-		
-	if not shoot:
-		return
-	
 	var bullet_m = Bullet.instance()
 	var pos = self.position
 	
@@ -138,19 +129,21 @@ func _do_shoot():
 	get_parent().add_child(bullet_m)
 
 	bullet_m.linear_velocity = aim_direction * BULLET_ACCEL
-#	add_collision_exception_with(bullet_m)
+	
+	shots_remaining = shots_remaining - 1
 
 func _get_input():
-	if recoil:
+	if in_recoil and not on_floor:
 		return
-	
+		
 	move_left = Input.is_action_pressed("move_left")
 	move_right = Input.is_action_pressed("move_right")
-	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown 
+	
+	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown and not in_recoil
 	
 	if shoot:
 		Cooldown.start(COOLDOWN)
-		shots_remaining = shots_remaining - 1
+		_do_shoot()
 	
 func _find_floor():
 	var found_floor = false
@@ -173,9 +166,6 @@ func _replenish_min_shots():
 		shots_remaining = MIN_SHOTS_ON_FLOOR
 			
 func _move_floor():
-	if recoil:
-		return
-		
 	if on_floor:
 		if move_left and not move_right:
 			if linear_velocity_var.x > -WALK_MAX_VELOCITY:
@@ -192,9 +182,6 @@ func _move_floor():
 		linear_velocity_previous = linear_velocity_var
 
 func _move_air():
-	if recoil:
-		return
-			
 	if shoot:
 		linear_velocity_var.y = JUMP_VELOCITY * opposite_aim_direction.y
 		linear_velocity_var.x = JUMP_VELOCITY * opposite_aim_direction.x
@@ -238,8 +225,9 @@ func _on_Player_body_entered(body):
 		_do_hit(body)
  
 func _do_hit(var body : Node2D):
+	_set_player_invincible()
 	hit_right = self.position.x < body.position.x
-	recoil = true
+	in_recoil = true
 	got_hit = true
 	TimerRecoil.start(RECOIL_TIME)
 #	_do_hit_bullet(body)
@@ -251,4 +239,19 @@ func _do_hit(var body : Node2D):
 #	Utility.delay_queue_free(child, 0.3)
 
 func _on_TimerRecoil_timeout():
-	got_hit = false
+	in_recoil = false
+	_set_player_vincible()
+
+func _set_player_invincible() -> void:
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, false)
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.INVINCIBLE, true)
+	
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, false)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, false)
+	
+func _set_player_vincible() -> void:
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, true)
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.INVINCIBLE, false)
+	
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, true)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, true)
