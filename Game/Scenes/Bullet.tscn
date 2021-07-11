@@ -25,7 +25,7 @@ color = Color( 0.933333, 0.933333, 0.466667, 1 )
 [node name="Bullet" type="RigidBody2D" groups=[
 "bullet",
 ]]
-collision_layer = 2147483650
+collision_layer = 2147483648
 collision_mask = 2147483648
 physics_material_override = SubResource( 1 )
 script = ExtResource( 2 )

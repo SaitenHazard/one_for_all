@@ -10,7 +10,8 @@
 radius = 26.0
 
 [node name="Player" type="RigidBody2D"]
-collision_mask = 5
+collision_layer = 0
+collision_mask = 0
 mode = 2
 physics_material_override = SubResource( 1 )
 custom_integrator = true

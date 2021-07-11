@@ -44,6 +44,13 @@ var Bullet : Object = preload("res://Scenes/Bullet.tscn")
 
 var test : bool
 
+var Utility = preload("res://Scripts/Utility.gd").new()
+
+func _ready():
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, true)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, true)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, true)
+
 func _do_animations(delta) -> void:
 	var scale_lerp : Vector2
 	

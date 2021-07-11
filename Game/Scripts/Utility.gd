@@ -1,4 +1,10 @@
-extends Node
+extends Node2D
+
+func set_collision_layer( var node : Node, var LAYER_BIT : int, var b : bool) -> void : 
+	node.set_collision_layer_bit(LAYER_BIT, b)
+
+func set_collision_mask( var node : Node, var LAYER_BIT : int, var b : bool) -> void : 
+	node.set_collision_mask_bit(LAYER_BIT, b)
 
 func reparent(child: Node, new_parent: Node):
 	var old_parent = child.get_parent()

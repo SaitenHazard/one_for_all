@@ -27,11 +27,19 @@ onready var Sprite_var : Sprite = $Sprite
 onready var RayCast2DLeft : RayCast2D = $RayCast2DLeft
 onready var RayCast2DRight : RayCast2D = $RayCast2DRight
 
+var Utility = preload("res://Scripts/Utility.gd").new()
+
 var test : bool
+
+func _ready():
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.ENEMY, true)
+#	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.BULLET, true)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PLAYER, true)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, false)
 
 func _process(delta):
 	_do_animations(delta)
-	_do_death()
+#	_do_death()
 	
 func _do_death():
 	if got_hit == false and lives == 0 and on_floor == true and jump == false:
@@ -134,6 +142,7 @@ func _move_air():
 			linear_velocity_var.x = AIR_VELOCITY
 
 func _on_Enemy2_body_entered(body):
+	return
 	if body.is_in_group('bullet'):
 		_do_hit(body)
 
@@ -147,7 +156,6 @@ func _do_hit(var body):
 	lives = lives - 1
 	
 func _do_hit_bullet(body):
-	var Utility = preload("res://Scripts/Utility.gd").new()
 	body.queue_free()
 	var child = Utility.reparent(body.get_node('Particles2D'), get_node("/root/MainScene"))
 	Utility.delay_queue_free(child, 0.3)

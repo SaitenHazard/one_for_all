@@ -1,13 +1,20 @@
 extends RigidBody2D
 
+var Utility = preload("res://Scripts/Utility.gd").new()
+
+func _ready():
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.BULLET, true)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, true)
+
 func _on_Lifetime_timeout():
-	_collide_with_player()
-	_collide_with_enemy_not()
+	return
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.BULLET, false)
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PICKUP, true)
+	
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, false)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PLAYER, true)
+	
+	remove_from_group('bullet')
+	
 	if not $Particles2D == null:
 		$Particles2D.set_emitting(false)
-
-func _collide_with_player():
-	self.set_collision_layer_bit (2, true)
-
-func _collide_with_enemy_not():
-	self.set_collision_layer_bit (1, false)

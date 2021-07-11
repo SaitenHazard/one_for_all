@@ -21,6 +21,8 @@ scale_random = 1.0
 color = Color( 0.584314, 0.807843, 0.803922, 1 )
 
 [node name="Pickup_slot" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -41,5 +43,5 @@ lifetime = 5.0
 speed_scale = 20.0
 local_coords = false
 process_material = SubResource( 2 )
-[connection signal="body_entered" from="." to="." method="_on_Pickup_slot_body_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Pickup_shot_body_entered"]
+[connection signal="body_entered" from="." to="." method="_on_Pickup_slot_body_entered"]
