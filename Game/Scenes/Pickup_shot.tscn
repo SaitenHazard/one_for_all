@@ -43,4 +43,6 @@ lifetime = 5.0
 speed_scale = 20.0
 local_coords = false
 process_material = SubResource( 2 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 [connection signal="body_entered" from="." to="." method="_on_Pickup_shot_body_entered"]

@@ -1,3 +1,5 @@
+class_name Utility
+
 extends Node2D
 
 func set_collision_layer( var node : Node2D, var LAYER_BIT : int, var b : bool) -> void :

@@ -6,13 +6,13 @@
 
 [sub_resource type="PhysicsMaterial" id=1]
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = ExtResource( 3 )
 shader_param/flash_color = Color( 1, 1, 1, 1 )
 shader_param/flash_modifier = 0.0
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=3]
 radius = 26.0
 
 [node name="Enemy" type="RigidBody2D" groups=[
@@ -29,13 +29,13 @@ contact_monitor = true
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 3 )
+material = SubResource( 2 )
 position = Vector2( 0, 24.836 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -26 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 
 [node name="Cooldown" type="Timer" parent="."]
 one_shot = true
@@ -49,6 +49,8 @@ collision_mask = 16
 position = Vector2( -29.3669, 5.5559 )
 cast_to = Vector2( 0, 32 )
 collision_mask = 16
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Enemy2_body_entered"]
 [connection signal="timeout" from="Cooldown" to="." method="_on_Cooldown_timeout"]

@@ -38,7 +38,7 @@ func _ready():
 	
 func _process(delta):
 	_do_animations(delta)
-#	_do_death()
+	_do_death()
 	
 func _do_death():
 	if got_hit == false and lives == 0 and on_floor == true and jump == false:

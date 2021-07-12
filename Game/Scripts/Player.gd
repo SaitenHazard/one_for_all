@@ -34,6 +34,8 @@ var linear_velocity_var : Vector2
 var linear_velocity_previous : Vector2
 var hit_ground : bool
 var hit_right
+var bool_do_teleport : bool
+var teleport_to : String
 
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
@@ -41,12 +43,9 @@ onready var Eye : Sprite = $Eye
 onready var TimerRecoil = $TimerRecoil
 
 var Bullet : Object = preload("res://Scenes/Bullet.tscn")
-
-var test : bool
-
 var Utility = preload("res://Scripts/Utility.gd").new()
 
-func _ready():
+func _ready() -> void:
 	_set_player_vincible()
 
 func _do_animations(delta) -> void:
@@ -94,6 +93,7 @@ func _set_aim_direction():
 
 func _integrate_forces(body_state):
 	self.body_state = body_state
+	_do_teleport()
 	_set_body_state()
 	_get_input()
 	_move_air()
@@ -101,6 +101,14 @@ func _integrate_forces(body_state):
 	_move_recoil()
 	_set_velocity()
 	_find_floor()
+	
+func _do_teleport() -> void: 
+	if bool_do_teleport:
+		var teleprot_position = get_node('/root/MainScene/teleport_tos/' + teleport_to).get_global_position()
+		transform = body_state.get_transform()
+		transform.origin = teleprot_position
+		body_state.set_transform(transform)
+		bool_do_teleport = false
 	
 func _move_recoil():
 	if got_hit:
@@ -183,6 +191,7 @@ func _move_floor():
 
 func _move_air():
 	if shoot:
+		self.set_global_position(Vector2(1,1))
 		linear_velocity_var.y = JUMP_VELOCITY * opposite_aim_direction.y
 		linear_velocity_var.x = JUMP_VELOCITY * opposite_aim_direction.x
 #		offset for buggy replenish system
@@ -252,6 +261,7 @@ func _set_player_invincible() -> void:
 	
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, false)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, false)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.TELEPORT, false)
 	
 func _set_player_vincible() -> void:
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, true)
@@ -259,14 +269,16 @@ func _set_player_vincible() -> void:
 	
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, true)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, true)
+	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.TELEPORT, true)
 
 func _do_flash():
 	$Sprite.material.set_shader_param("flash_modifier", 1)
-	
 	yield(get_tree().create_timer(0.1), "timeout")
-	
 	$Sprite.material.set_shader_param("flash_modifier", 0.25)
-		
 	yield(get_tree().create_timer(RECOIL_TIME), "timeout")
-		
 	$Sprite.material.set_shader_param("flash_modifier", 0)
+
+func _on_Teleporter_player_entered_teleporter(var teleport_to):
+	self.teleport_to = teleport_to
+	bool_do_teleport = true
+	print('in')

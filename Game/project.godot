@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Enums",
 "language": "GDScript",
 "path": "res://Scripts/Enums.gd"
+}, {
+"base": "Node2D",
+"class": "Utility",
+"language": "GDScript",
+"path": "res://Scripts/Utility.gd"
 } ]
 _global_script_class_icons={
-"Enums": ""
+"Enums": "",
+"Utility": ""
 }
 
 [application]

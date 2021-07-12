@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_right.png-fd34282a2906eaf9c41c156b4b2e8808.stex"
+path="res://.import/teleport.png-1606c987839b3d1f76249bad910eea0f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/tile_right.png"
-dest_files=[ "res://.import/tile_right.png-fd34282a2906eaf9c41c156b4b2e8808.stex" ]
+source_file="res://sprite/teleport.png"
+dest_files=[ "res://.import/teleport.png-1606c987839b3d1f76249bad910eea0f.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
