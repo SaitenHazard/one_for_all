@@ -15,7 +15,7 @@ var on_floor : bool
 var linear_velocity_var : Vector2
 var linear_velocity_previous : Vector2
 var hit_ground : bool
-var walk_direction : float = 1.0
+export var walk_direction : float = 1.0
 var dead : bool = false
 var lives : int = 1
 var jump : bool = false
@@ -36,6 +36,9 @@ func _ready():
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PLAYER, true)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.BULLET, true)
 	
+	Utility.set_collision_mask(RayCast2DLeft, Enums.COLLISION_LAYER.TILE, true)
+	Utility.set_collision_mask(RayCast2DRight, Enums.COLLISION_LAYER.TILE, true)
+
 func _process(delta):
 	_do_animations(delta)
 	_do_death()
@@ -104,7 +107,7 @@ func _find_floor():
 			found_floor = true
 			floor_index = x
 		
-		if body_state.get_contact_collider_object(x).is_in_group('tile'):
+		if body_state.get_contact_collider_object(x).get_collision_layer_bit(Enums.COLLISION_LAYER.TILE):
 			if contact_normal.x > 0.9:
 				walk_direction = 1.0
 			elif contact_normal.x < -0.9:
@@ -141,7 +144,7 @@ func _move_air():
 			linear_velocity_var.x = AIR_VELOCITY
 
 func _on_Enemy2_body_entered(body):
-	if body.is_in_group('bullet'):
+	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.BULLET):
 		_do_hit(body)
 
 func _do_hit(var body):

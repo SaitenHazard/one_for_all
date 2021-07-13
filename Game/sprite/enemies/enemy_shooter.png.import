@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bullet_slot.png-0edceab65cbcd1dde5ad1a09e6d34af6.stex"
+path="res://.import/enemy_shooter.png-5ec09c39a172f38234391ac65825b3ac.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/bullet_slot.png"
-dest_files=[ "res://.import/bullet_slot.png-0edceab65cbcd1dde5ad1a09e6d34af6.stex" ]
+source_file="res://sprite/enemies/enemy_shooter.png"
+dest_files=[ "res://.import/enemy_shooter.png-5ec09c39a172f38234391ac65825b3ac.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ui_bullet_slot.png-193914a4ee955dfa521c87e55163522f.stex"
+path="res://.import/enemy.png-69bffb5ad64421af0d0ef7fd42d4124d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/ui_bullet_slot.png"
-dest_files=[ "res://.import/ui_bullet_slot.png-193914a4ee955dfa521c87e55163522f.stex" ]
+source_file="res://sprite/enemies/enemy.png"
+dest_files=[ "res://.import/enemy.png-69bffb5ad64421af0d0ef7fd42d4124d.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

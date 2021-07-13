@@ -1,12 +1,14 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/Pickup_shot.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/UIShots.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Pickup_slot.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Enemy.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/Shooter.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Teleporter.tscn" type="PackedScene" id=7]
 [ext_resource path="res://sprite/tile.png" type="Texture" id=8]
+[ext_resource path="res://Scripts/TileMap.gd" type="Script" id=9]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 64, 64, 0, 64, 0, 0, 64, 0 )
@@ -64,28 +66,19 @@ friction = 0.5
 [node name="MainScene" type="Node2D"]
 position = Vector2( 0, -23.7841 )
 
-[node name="Pickup_shot" parent="." instance=ExtResource( 2 )]
-position = Vector2( 1575.39, 801.693 )
-
-[node name="Enemy2" parent="." instance=ExtResource( 5 )]
-position = Vector2( -1157, 1051.78 )
-
 [node name="TileMap" type="TileMap" parent="." groups=[
 "tile",
 ]]
 tile_set = SubResource( 3 )
 cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-collision_layer = 2147483679
-collision_mask = 31
+collision_layer = 2147483648
+collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 327651, -1073741824, 0, 327654, -1073741824, 0, 327655, -1073741824, 0, 327656, -1073741824, 0, 327657, -1073741824, 0, 327658, -1073741824, 0, 393187, -1073741824, 0, 393194, -1073741824, 0, 458723, -1073741824, 0, 458730, -1073741824, 0, 524259, -1073741824, 0, 524266, -1073741824, 0, 524277, -1073741824, 0, 524278, -1073741824, 0, 524279, -1073741824, 0, 524280, -1073741824, 0, 524281, -1073741824, 0, 524282, -1073741824, 0, 589795, -1073741824, 0, 589802, -1073741824, 0, 589813, -1073741824, 0, 589820, -1073741824, 0, 589821, -1073741824, 0, 589822, -1073741824, 0, 589823, -1073741824, 0, 524288, -1073741824, 0, 524289, -1073741824, 0, 524290, -1073741824, 0, 524291, -1073741824, 0, 655331, -1073741824, 0, 655340, -1073741824, 0, 655341, -1073741824, 0, 655342, -1073741824, 0, 655343, -1073741824, 0, 655344, -1073741824, 0, 655345, -1073741824, 0, 655346, -1073741824, 0, 655347, -1073741824, 0, 655348, -1073741824, 0, 655349, -1073741824, 0, 589832, -1073741824, 0, 589833, -1073741824, 0, 589834, -1073741824, 0, 589835, -1073741824, 0, 589836, -1073741824, 0, 589837, -1073741824, 0, 720867, -1073741824, 0, 720868, -1073741824, 0, 720869, -1073741824, 0, 786407, -1073741824, 0, 720912, -1073741824, 0, 720913, -1073741824, 0, 720914, -1073741824, 0, 720915, -1073741824, 0, 720916, -1073741824, 0, 720917, -1073741824, 0, 917480, -1073741824, 0, 983016, -1073741824, 0, 917563, -1073741824, 0, 917564, -1073741824, 0, 917565, -1073741824, 0, 917566, -1073741824, 0, 917567, -1073741824, 0, 917568, -1073741824, 0, 1048552, -1073741824, 0, 983057, -1073741824, 0, 983058, -1073741824, 0, 983059, -1073741824, 0, 983060, -1073741824, 0, 983061, -1073741824, 0, 983062, -1073741824, 0, 1114088, -1073741824, 0, 1114089, -1073741824, 0, 1114090, -1073741824, 0, 1114098, -1073741824, 0, 1114099, -1073741824, 0, 1114100, -1073741824, 0, 1048579, -1073741824, 0, 1048587, -1073741824, 0, 1048588, -1073741824, 0, 1048589, -1073741824, 0, 1048590, -1073741824, 0, 1048591, -1073741824, 0, 1179626, -1073741824, 0, 1179627, -1073741824, 0, 1179628, -1073741824, 0, 1179629, -1073741824, 0, 1179630, -1073741824, 0, 1179631, -1073741824, 0, 1179632, -1073741824, 0, 1179633, -1073741824, 0, 1179634, -1073741824, 0, 1114115, -1073741824, 0, 1114123, -1073741824, 0, 1179651, -1073741824, 0, 1179659, -1073741824, 0, 1245188, -1073741824, 0, 1245189, -1073741824, 0, 1245190, -1073741824, 0, 1245191, -1073741824, 0, 1245192, -1073741824, 0, 1245193, -1073741824, 0, 1245194, -1073741824, 0 )
-
-[node name="Teleporter" parent="." instance=ExtResource( 7 )]
-position = Vector2( -789.679, 980.427 )
-teleport_to = "teleport_to1"
+tile_data = PoolIntArray( 65591, 0, 0, 65592, 0, 0, 65593, 0, 0, 65594, 0, 0, 65595, 0, 0, 131153, 0, 0, 131204, 0, 0, 131208, 0, 0, 131209, 0, 0, 131210, 0, 0, 131211, 0, 0, 131214, 0, 0, 196689, 0, 0, 196740, 0, 0, 196744, 0, 0, 196750, 0, 0, 327651, -1073741824, 0, 327654, -1073741824, 0, 327655, -1073741824, 0, 327656, -1073741824, 0, 327657, -1073741824, 0, 327658, -1073741824, 0, 262225, 0, 0, 262276, 0, 0, 262280, 0, 0, 262286, 0, 0, 393187, -1073741824, 0, 393194, -1073741824, 0, 327761, 0, 0, 327812, 0, 0, 327816, 0, 0, 327822, 0, 0, 458723, -1073741824, 0, 458730, -1073741824, 0, 393297, 0, 0, 393348, 0, 0, 393349, 0, 0, 393352, 0, 0, 393353, 0, 0, 393354, 0, 0, 393355, 0, 0, 393356, 0, 0, 393357, 0, 0, 393358, 0, 0, 524259, -1073741824, 0, 524266, -1073741824, 0, 524277, -1073741824, 0, 524278, -1073741824, 0, 524279, -1073741824, 0, 524280, -1073741824, 0, 524281, -1073741824, 0, 524282, -1073741824, 0, 458833, 0, 0, 458834, 0, 0, 458858, 0, 0, 458884, 0, 0, 458894, 0, 0, 589795, -1073741824, 0, 589802, -1073741824, 0, 589813, -1073741824, 0, 589820, -1073741824, 0, 589821, -1073741824, 0, 589822, -1073741824, 0, 589823, -1073741824, 0, 524288, -1073741824, 0, 524289, -1073741824, 0, 524290, -1073741824, 0, 524291, -1073741824, 0, 524353, 0, 0, 524354, 0, 0, 524355, 0, 0, 524356, 0, 0, 524357, 0, 0, 524358, 0, 0, 524359, 0, 0, 524360, 0, 0, 524361, 0, 0, 524362, 0, 0, 524363, 0, 0, 524364, 0, 0, 524365, 0, 0, 524366, 0, 0, 524367, 0, 0, 524368, 0, 0, 524369, 0, 0, 524370, 0, 0, 524394, 0, 0, 524420, 0, 0, 524430, 0, 0, 524434, 0, 0, 655331, -1073741824, 0, 655339, 0, 0, 655340, -1073741824, 0, 655341, -1073741824, 0, 655342, -1073741824, 0, 655343, -1073741824, 0, 655344, -1073741824, 0, 655345, -1073741824, 0, 655346, -1073741824, 0, 655347, -1073741824, 0, 655348, -1073741824, 0, 655349, -1073741824, 0, 589832, -1073741824, 0, 589833, -1073741824, 0, 589834, -1073741824, 0, 589835, -1073741824, 0, 589836, -1073741824, 0, 589837, -1073741824, 0, 589889, 0, 0, 589906, 0, 0, 589907, 0, 0, 589908, 0, 0, 589909, 0, 0, 589910, 0, 0, 589911, 0, 0, 589912, 0, 0, 589913, 0, 0, 589914, 0, 0, 589915, 0, 0, 589916, 0, 0, 589917, 0, 0, 589918, 0, 0, 589919, 0, 0, 589920, 0, 0, 589921, 0, 0, 589922, 0, 0, 589923, 0, 0, 589924, 0, 0, 589925, 0, 0, 589926, 0, 0, 589927, 0, 0, 589928, 0, 0, 589929, 0, 0, 589930, 0, 0, 589956, 0, 0, 589966, 0, 0, 589970, 0, 0, 720867, -1073741824, 0, 720868, -1073741824, 0, 720869, -1073741824, 0, 655425, 0, 0, 655492, 0, 0, 655502, 0, 0, 655506, 0, 0, 786407, -1073741824, 0, 720912, -1073741824, 0, 720913, -1073741824, 0, 720914, -1073741824, 0, 720915, -1073741824, 0, 720916, -1073741824, 0, 720917, -1073741824, 0, 720961, 0, 0, 721006, 0, 0, 721007, 0, 0, 721028, 0, 0, 721029, 0, 0, 721038, 0, 0, 721042, 0, 0, 786542, 0, 0, 786543, 0, 0, 786564, 0, 0, 786574, 0, 0, 786578, 0, 0, 917480, -1073741824, 0, 852078, 0, 0, 852079, 0, 0, 852100, 0, 0, 852110, 0, 0, 852114, 0, 0, 983016, -1073741824, 0, 917563, -1073741824, 0, 917564, -1073741824, 0, 917565, -1073741824, 0, 917566, -1073741824, 0, 917567, -1073741824, 0, 917568, -1073741824, 0, 917570, 0, 0, 917571, 0, 0, 917572, 0, 0, 917573, 0, 0, 917574, 0, 0, 917594, 0, 0, 917595, 0, 0, 917596, 0, 0, 917597, 0, 0, 917598, 0, 0, 917599, 0, 0, 917600, 0, 0, 917601, 0, 0, 917602, 0, 0, 917603, 0, 0, 917604, 0, 0, 917605, 0, 0, 917606, 0, 0, 917607, 0, 0, 917608, 0, 0, 917609, 0, 0, 917610, 0, 0, 917611, 0, 0, 917612, 0, 0, 917613, 0, 0, 917636, 0, 0, 917646, 0, 0, 917650, 0, 0, 1048552, -1073741824, 0, 983057, -1073741824, 0, 983058, -1073741824, 0, 983059, -1073741824, 0, 983060, -1073741824, 0, 983061, -1073741824, 0, 983062, -1073741824, 0, 983110, 0, 0, 983172, 0, 0, 983182, 0, 0, 983186, 0, 0, 1114088, -1073741824, 0, 1114089, -1073741824, 0, 1114090, -1073741824, 0, 1114098, -1073741824, 0, 1114099, -1073741824, 0, 1114100, -1073741824, 0, 1048579, -1073741824, 0, 1048587, -1073741824, 0, 1048588, -1073741824, 0, 1048589, -1073741824, 0, 1048590, -1073741824, 0, 1048591, -1073741824, 0, 1048646, 0, 0, 1048662, 0, 0, 1048663, 0, 0, 1048708, 0, 0, 1048709, 0, 0, 1048718, 0, 0, 1048722, 0, 0, 1179626, -1073741824, 0, 1179627, -1073741824, 0, 1179628, -1073741824, 0, 1179629, -1073741824, 0, 1179630, -1073741824, 0, 1179631, -1073741824, 0, 1179632, -1073741824, 0, 1179633, -1073741824, 0, 1179634, -1073741824, 0, 1114115, -1073741824, 0, 1114123, -1073741824, 0, 1114182, 0, 0, 1114198, 0, 0, 1114199, 0, 0, 1114244, 0, 0, 1114254, 0, 0, 1114255, 0, 0, 1114256, 0, 0, 1114257, 0, 0, 1114258, 0, 0, 1179651, -1073741824, 0, 1179659, -1073741824, 0, 1179718, 0, 0, 1179719, 0, 0, 1179720, 0, 0, 1179721, 0, 0, 1179722, 0, 0, 1179723, 0, 0, 1179724, 0, 0, 1179725, 0, 0, 1179726, 0, 0, 1179727, 0, 0, 1179728, 0, 0, 1179729, 0, 0, 1179780, 0, 0, 1245188, -1073741824, 0, 1245189, -1073741824, 0, 1245190, -1073741824, 0, 1245191, -1073741824, 0, 1245192, -1073741824, 0, 1245193, -1073741824, 0, 1245194, -1073741824, 0, 1245316, 0, 0, 1310852, 0, 0, 1376388, 0, 0, 1376389, 0, 0, 1376390, 0, 0, 1376391, 0, 0, 1376392, 0, 0, 1376393, 0, 0, 1376394, 0, 0, 1376395, 0, 0, 1376396, 0, 0, 1376397, 0, 0, 1376398, 0, 0 )
+script = ExtResource( 9 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( -882.435, 966.641 )
+position = Vector2( 9248, 1055.78 )
 physics_material_override = SubResource( 4 )
 gravity_scale = 8.5
 
@@ -97,11 +90,116 @@ zoom = Vector2( 1.5, 1.5 )
 
 [node name="Shots" parent="Player/Camera2D/CanvasLayer" instance=ExtResource( 3 )]
 
-[node name="Pickup_slot" parent="." instance=ExtResource( 4 )]
-position = Vector2( -443.91, 409.203 )
-
 [node name="teleport_tos" type="Node2D" parent="."]
 
-[node name="teleport_to1" type="Node2D" parent="teleport_tos"]
+[node name="teleport_to2" type="Position2D" parent="teleport_tos"]
 position = Vector2( 3953.22, 813.651 )
-[connection signal="player_entered_teleporter" from="Teleporter" to="Player" method="_on_Teleporter_player_entered_teleporter"]
+
+[node name="teleport_to3" type="Position2D" parent="teleport_tos"]
+position = Vector2( -800, 983.784 )
+
+[node name="enemies" type="Node2D" parent="."]
+
+[node name="Enemy2" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( -1157, 1051.78 )
+
+[node name="Enemy3" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( 5152, 479.784 )
+walk_direction = -1.0
+
+[node name="Enemy4" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( 5064, 479.784 )
+walk_direction = -1.0
+
+[node name="Enemy6" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( 7005.12, 859.809 )
+walk_direction = -1.0
+
+[node name="Enemy7" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( 6869.55, 857.43 )
+walk_direction = -1.0
+
+[node name="Enemy8" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( 6725.06, 853.323 )
+walk_direction = -1.0
+
+[node name="Enemy9" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( 5792, 503.784 )
+walk_direction = -1.0
+
+[node name="Enemy10" parent="enemies" instance=ExtResource( 5 )]
+position = Vector2( 6240, 503.784 )
+
+[node name="Shooters" type="Node2D" parent="."]
+
+[node name="Shooter" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 4512, 607.784 )
+rotation = 1.5708
+
+[node name="Shooter8" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 5472, 1079.78 )
+rotation = 3.14159
+
+[node name="Shooter2" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 5728, 159.784 )
+rotation = -3.14159
+
+[node name="Shooter3" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 6144, 671.784 )
+rotation = 1.5708
+
+[node name="Shooter4" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 6400, 671.784 )
+rotation = 1.5708
+
+[node name="Shooter5" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 6656, 671.784 )
+rotation = 1.5708
+
+[node name="Shooter6" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 5344, 503.784 )
+
+[node name="Shooter7" parent="Shooters" instance=ExtResource( 6 )]
+position = Vector2( 6752, 503.784 )
+rotation = 3.14159
+
+[node name="pickups" type="Node2D" parent="."]
+
+[node name="pickup_shots" type="Node2D" parent="pickups"]
+
+[node name="Pickup_shot" parent="pickups/pickup_shots" instance=ExtResource( 2 )]
+position = Vector2( 1575.39, 801.693 )
+
+[node name="Pickup_shot2" parent="pickups/pickup_shots" instance=ExtResource( 2 )]
+position = Vector2( 4083.48, 668.351 )
+
+[node name="Pickup_shot3" parent="pickups/pickup_shots" instance=ExtResource( 2 )]
+position = Vector2( 6952, 479.784 )
+
+[node name="Pickup_shot4" parent="pickups/pickup_shots" instance=ExtResource( 2 )]
+position = Vector2( 9280, 287.784 )
+
+[node name="pickup_slots" type="Node2D" parent="pickups"]
+
+[node name="Pickup_slot" parent="pickups/pickup_slots" instance=ExtResource( 4 )]
+position = Vector2( -443.91, 409.203 )
+
+[node name="Pickup_slot2" parent="pickups/pickup_slots" instance=ExtResource( 4 )]
+position = Vector2( 5223.11, 94.8976 )
+
+[node name="teleporters" type="Node2D" parent="."]
+
+[node name="Teleporter" parent="teleporters" instance=ExtResource( 7 )]
+position = Vector2( -648, 983.784 )
+teleport_to = "teleport_to2"
+
+[node name="Teleporter2" parent="teleporters" instance=ExtResource( 7 )]
+position = Vector2( 3744, 839.784 )
+teleport_to = "teleport_to3"
+
+[node name="Teleporter3" parent="teleporters" instance=ExtResource( 7 )]
+position = Vector2( 3448, -8.21588 )
+teleport_to = "teleport_to3"
+[connection signal="player_entered_teleporter" from="teleporters/Teleporter" to="Player" method="_on_Teleporter_player_entered_teleporter"]
+[connection signal="player_entered_teleporter" from="teleporters/Teleporter2" to="Player" method="_on_Teleporter_player_entered_teleporter"]
+[connection signal="player_entered_teleporter" from="teleporters/Teleporter3" to="Player" method="_on_Teleporter_player_entered_teleporter"]

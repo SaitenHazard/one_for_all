@@ -13,11 +13,13 @@ const MAX_FLOOR_AIRBORNE_TIME : float  = 0.15
 const BULLET_ACCEL  : float = 800.0
 const COOLDOWN  : float = 0.5
 const EYE_DISTANCE : float = 5.0
-const RECOIL_TIME : float = 1.5
+const BULLET_SPAWN_DISTANCE : float = 5.0
+const RECOIL_TIME : float = 2.5
+
+export var shots_max : int = 3
 
 var got_hit : bool = false
 var in_recoil : bool = false
-var shots_max : int = 1
 var shots_remaining : int = shots_max
 var aim_direction : Vector2
 var opposite_aim_direction : Vector2
@@ -133,8 +135,8 @@ func _do_shoot():
 	var bullet_m = Bullet.instance()
 	var pos = self.position
 	
-	bullet_m.position = pos
-	get_parent().add_child(bullet_m)
+	bullet_m.global_position = self.global_position + (EYE_DISTANCE * aim_direction)
+	get_tree().get_root().add_child(bullet_m)
 
 	bullet_m.linear_velocity = aim_direction * BULLET_ACCEL
 	
@@ -147,7 +149,7 @@ func _get_input():
 	move_left = Input.is_action_pressed("move_left")
 	move_right = Input.is_action_pressed("move_right")
 	
-	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown and not in_recoil
+	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown
 	
 	if shoot:
 		Cooldown.start(COOLDOWN)
@@ -222,49 +224,38 @@ func shots_max_add():
 	shots_max = shots_max + 1
 
 func _on_Player_body_entered(body):
-	if body.is_in_group('bullet') and shots_remaining < shots_max:
-		shots_remaining_add()
+	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.PICKUP) and shots_remaining < shots_max:
+		if body.is_in_group('shots'):
+			shots_remaining_add()
+			body.queue_free()
+		elif body.is_in_group('slots'):
+			shots_max_add()
 		body.queue_free()
 		
-	if body.is_in_group('pickup_slot'):
-		shots_max_add()
-		body.queue_free()
+	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.ENEMY):
+		do_hit(body)
 		
-	if body.is_in_group('enemy'):
-		_do_hit(body)
- 
-func _do_hit(var body : Node2D):
-	_set_player_invincible()
-	_do_flash()
-	hit_right = self.position.x < body.position.x
-	in_recoil = true
-	got_hit = true
-	TimerRecoil.start(RECOIL_TIME)
-#	_do_hit_bullet(body)
-	
-#func _do_hit_bullet(body):
-#	var Utility = preload("res://Scripts/Utility.gd").new()
-#	body.queue_free()
-#	var child = Utility.reparent(body.get_node('Particles2D'), get_node("/root/MainScene"))
-#	Utility.delay_queue_free(child, 0.3)
+	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.BULLET_ENEMY):
+		do_hit(body)
 
 func _on_TimerRecoil_timeout():
 	in_recoil = false
-	
 	yield(get_tree().create_timer(0.5), "timeout")
-	
 	_set_player_vincible()
 
 func _set_player_invincible() -> void:
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, false)
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.INVINCIBLE, true)
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.BULLET_ENEMY, false)
 	
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, false)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PICKUP, false)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.TELEPORT, false)
 	
 func _set_player_vincible() -> void:
+	print('in')
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, true)
+	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.BULLET_ENEMY, true)
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.INVINCIBLE, false)
 	
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, true)
@@ -281,4 +272,11 @@ func _do_flash():
 func _on_Teleporter_player_entered_teleporter(var teleport_to):
 	self.teleport_to = teleport_to
 	bool_do_teleport = true
-	print('in')
+
+func do_hit(var body : Node2D):
+	_set_player_invincible()
+	_do_flash()
+	hit_right = self.position.x < body.position.x
+	in_recoil = true
+	got_hit = true
+	TimerRecoil.start(RECOIL_TIME)

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bullet.png-1227a1f8ee335c2507e15c2db3268153.stex"
+path="res://.import/eye.png-40d13cb3d0a60ea38a51da9f51f78f50.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/bullet.png"
-dest_files=[ "res://.import/bullet.png-1227a1f8ee335c2507e15c2db3268153.stex" ]
+source_file="res://sprite/player/eye.png"
+dest_files=[ "res://.import/eye.png-40d13cb3d0a60ea38a51da9f51f78f50.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

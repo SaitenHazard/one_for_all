@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/teleport.png-1606c987839b3d1f76249bad910eea0f.stex"
+path="res://.import/enemy - Copy.png-e7317d9eb2292ac26b8a2fe426764ff4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/teleport.png"
-dest_files=[ "res://.import/teleport.png-1606c987839b3d1f76249bad910eea0f.stex" ]
+source_file="res://sprite/enemies/enemy - Copy.png"
+dest_files=[ "res://.import/enemy - Copy.png-e7317d9eb2292ac26b8a2fe426764ff4.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
