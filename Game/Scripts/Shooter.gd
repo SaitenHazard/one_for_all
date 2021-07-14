@@ -1,10 +1,11 @@
 extends Area2D
 
 onready var Position2DShooter : Position2D = $Position2DBullet
+onready var Eye : Sprite = $Eye
 onready var BULLET : Object = preload("res://Scenes/Bullet_enemy.tscn")
-onready	var Utility = preload("res://Scripts/Utility.gd").new()
+onready var Utility = preload("res://Scripts/Utility.gd").new()
 
-onready	var PLAYER = get_node("/root/MainScene/Player")
+onready var PLAYER = get_node("/root/MainScene/Player")
 
 var shoot_position : Vector2
 var shoot_direction
