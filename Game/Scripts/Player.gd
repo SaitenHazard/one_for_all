@@ -40,7 +40,7 @@ var linear_velocity_var : Vector2
 var linear_velocity_previous : Vector2
 var hit_ground : bool
 var hit_right
-var bool_do_teleport : bool
+var bool_do_reset : bool = false
 var teleport_to : String
 
 onready var Cooldown : Timer = $Cooldown
@@ -55,6 +55,13 @@ onready var Sounds = get_node('/root/MainScene/Sounds')
 var Bullet : Object = preload("res://Scenes/Bullet.tscn")
 var Utility = preload("res://Scripts/Utility.gd").new()
 
+var checkpoint_name : String
+
+func set_checkpoint_name(name) -> void:
+	checkpoint_name = name
+
+func reset_to_checkpoint() -> void:
+	bool_do_reset = true
 
 func _ready() -> void:
 	_set_player_vincible()
@@ -110,7 +117,7 @@ func _set_aim_direction():
 
 func _integrate_forces(body_state):
 	self.body_state = body_state
-	_do_teleport()
+	_do_reset()
 	_set_body_state()
 	_get_input()
 	_move_air()
@@ -119,13 +126,13 @@ func _integrate_forces(body_state):
 	_set_velocity()
 	_find_floor()
 	
-func _do_teleport() -> void: 
-	if bool_do_teleport:
-		var teleprot_position = get_node('/root/MainScene/teleport_tos/' + teleport_to).get_global_position()
+func _do_reset() -> void: 
+	if bool_do_reset:
+		var teleprot_position = get_node('/root/MainScene/Checkpoints/' + checkpoint_name).get_global_position()
 		transform = body_state.get_transform()
 		transform.origin = teleprot_position
 		body_state.set_transform(transform)
-		bool_do_teleport = false
+		bool_do_reset = false
 	
 func _move_recoil():
 	if got_hit:
@@ -307,13 +314,13 @@ func _do_flash():
 func _do_refill_ani():
 	$Sprite.material.set_shader_param("flash_color", Color(0.97,0.63,0.27,1))
 	$Sprite.material.set_shader_param("flash_modifier", 1)
-	yield(get_tree().create_timer(0.2), "timeout")
+	yield(get_tree().create_timer(0.15), "timeout")
 	$Sprite.material.set_shader_param("flash_modifier", 0)
 
-func _on_Teleporter_player_entered_teleporter(var teleport_to):
-	self.teleport_to = teleport_to
-	Sounds.get_node('teleport').play()
-	bool_do_teleport = true
+#func _on_Teleporter_player_entered_teleporter(var teleport_to):
+#	self.teleport_to = teleport_to
+#	Sounds.get_node('teleport').play()
+#	bool_do_teleport = true
 
 func do_hit(var body : Node2D):
 	_set_player_invincible()
