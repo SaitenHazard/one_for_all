@@ -23,11 +23,13 @@ var got_hit : bool = false
 var hit_right : int = 0
 
 onready var Cooldown : Timer = $Cooldown
+onready var DeatTimer : Timer = $DeathTimer
 onready var Sprite_var : Sprite = $Sprite
 onready var RayCast2DLeft : RayCast2D = $RayCast2DLeft
 onready var RayCast2DRight : RayCast2D = $RayCast2DRight
 
 var Utility = preload("res://Scripts/Utility.gd").new()
+onready var Sounds = get_node('/root/MainScene/Sounds')
 
 var test : bool
 
@@ -41,11 +43,11 @@ func _ready():
 
 func _process(delta):
 	_do_animations(delta)
-	_do_death()
+#	_do_death()
 	
-func _do_death():
-	if got_hit == false and lives == 0 and on_floor == true and jump == false:
-		self.queue_free()
+#func _do_death():
+#	if got_hit == false and lives == 0 and on_floor == true and jump == false:
+#		self.queue_free()
 
 func _do_animations(delta) -> void:
 	var scale_lerp : Vector2
@@ -148,18 +150,24 @@ func _on_Enemy2_body_entered(body):
 		_do_hit(body)
 
 func _do_hit(var body):
+	Sounds.get_node('hit').play()
 	jump = true
 	got_hit = true
 	Cooldown.start(COOLDOWN_TIME)
 	hit_right = self.position.x < body.position.x
 	_do_hit_bullet(body)
 	_do_flash()
-	lives = lives - 1
-
+#	lives = lives - 1
+#
+#	if lives == 0:
+#		$DeathTimer.start()
+	
 func _do_flash():
 	$Sprite.material.set_shader_param("flash_modifier", 1)
-	yield(get_tree().create_timer(0.1), "timeout")
-	$Sprite.material.set_shader_param("flash_modifier", 0)
+	yield(get_tree().create_timer(0.5), "timeout")
+	self.queue_free()
+#	yield(get_tree().create_timer(0.1), "timeout")
+#	$Sprite.material.set_shader_param("flash_modifier", 0)
 
 func _do_hit_bullet(body):
 	body.queue_free()
@@ -169,3 +177,5 @@ func _do_hit_bullet(body):
 func _on_Cooldown_timeout():
 	got_hit = false
 
+func _on_DeathTimer_timeout():
+	self.queue_free()

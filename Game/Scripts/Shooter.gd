@@ -4,7 +4,8 @@ onready var Position2DShooter : Position2D = $Position2DBullet
 onready var BULLET : Object = preload("res://Scenes/Bullet_enemy.tscn")
 onready var Utility = preload("res://Scripts/Utility.gd").new()
 
-onready var PLAYER = get_node("/root/MainScene/Player")
+onready var Player = get_node("/root/MainScene/Player")
+onready var Sounds = get_node('/root/MainScene/Sounds')
 
 var shoot_position : Vector2
 var shoot_direction
@@ -40,9 +41,10 @@ func _on_Shooter_body_entered(body):
 	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.BULLET):
 		_do_hit(body)
 	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.PLAYER):
-		PLAYER.do_hit(body)
+		Player.do_hit(body)
 	
 func _do_hit(var body):
+	Sounds.get_node('hit').play()
 	_do_hit_bullet(body)
 	_do_flash()
 		
@@ -54,5 +56,4 @@ func _do_hit_bullet(body):
 func _do_flash():
 	$Sprite.material.set_shader_param("flash_modifier", 1)
 	yield(get_tree().create_timer(0.1), "timeout")
-	$Sprite.material.set_shader_param("flash_modifier", 0)
 	self.queue_free()

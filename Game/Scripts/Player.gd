@@ -12,11 +12,12 @@ const RECOIL_HORIZONTAL_VELOCITY : float = 300.0
 const MAX_FLOOR_AIRBORNE_TIME : float  = 0.15
 const BULLET_ACCEL  : float = 800.0
 const COOLDOWN  : float = 0.5
+const REFILLCOOLDOWN  : float = 1.0
 const EYE_DISTANCE : float = 5.0
 const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
 
-export var shots_max : int = 4
+export var shots_max : int = 3
 
 var got_hit : bool = false
 var in_recoil : bool = false
@@ -25,9 +26,12 @@ var aim_direction : Vector2
 var opposite_aim_direction : Vector2
 var airborne_time = 1e20
 var in_cooldown : bool
+var do_refill : bool
 var move_left : bool
 var move_right : bool
 var shoot : bool
+var just_landed = false
+var just_refill_soundeffect = false
 
 var body_state
 var step : float
@@ -43,9 +47,14 @@ onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
 onready var Eye : Sprite = $Eye
 onready var TimerRecoil = $TimerRecoil
+onready var TimerRefill = $TimerRefill
+onready var PArticles2D = $Particles2D
+
+onready var Sounds = get_node('/root/MainScene/Sounds')
 
 var Bullet : Object = preload("res://Scenes/Bullet.tscn")
 var Utility = preload("res://Scripts/Utility.gd").new()
+
 
 func _ready() -> void:
 	_set_player_vincible()
@@ -81,9 +90,15 @@ func _process(delta):
 	_set_cooldown()
 	_do_animations(delta)
 	_set_eye_position()
+
+func get_aim_direction() -> Vector2:
+	return aim_direction
 	
 func _set_eye_position():
 	Eye.global_position = self.global_position + (EYE_DISTANCE * aim_direction)
+
+func get_is_on_floor() -> bool:
+	return on_floor
 
 func _set_cooldown():
 	in_cooldown = not Cooldown.is_stopped()
@@ -132,6 +147,8 @@ func _set_velocity():
 	body_state.set_linear_velocity(linear_velocity_var)
 	
 func _do_shoot():
+	Sounds.get_node('jump').play()
+	
 	var bullet_m = Bullet.instance()
 	var pos = self.position
 	
@@ -152,6 +169,9 @@ func _get_input():
 	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown
 	
 	if shoot:
+		just_refill_soundeffect = false
+		do_refill = false
+		TimerRefill.start(REFILLCOOLDOWN)
 		Cooldown.start(COOLDOWN)
 		_do_shoot()
 	
@@ -166,15 +186,30 @@ func _find_floor():
 			floor_index = x
 
 	if found_floor:
-		_replenish_min_shots()
+		_refill_shots()
+		_sound_effect_just_landed()
 		airborne_time = 0.0
+		
 	else:
 		airborne_time += step
+		just_landed = false
 
-func _replenish_min_shots():
-	if shots_remaining == 0 and linear_velocity_var.x == 0:
-		shots_remaining = MIN_SHOTS_ON_FLOOR
-			
+func _sound_effect_just_landed():
+	if just_landed == false:
+			just_landed = true
+			Sounds.get_node('land').play()
+
+func _sound_effect_just_refill():
+	if just_refill_soundeffect == false:
+		_do_refill_ani()
+		just_refill_soundeffect = true
+		Sounds.get_node('refill').play()
+
+func _refill_shots():
+	if do_refill == true:
+		shots_remaining = shots_max
+		_sound_effect_just_refill()
+
 func _move_floor():
 	if on_floor:
 		if move_left and not move_right:
@@ -253,7 +288,6 @@ func _set_player_invincible() -> void:
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.TELEPORT, false)
 	
 func _set_player_vincible() -> void:
-	print('in')
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PLAYER, true)
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.BULLET_ENEMY, true)
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.INVINCIBLE, false)
@@ -263,14 +297,22 @@ func _set_player_vincible() -> void:
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.TELEPORT, true)
 
 func _do_flash():
+	return
+#	$Sprite.material.set_shader_param("flash_color", Color(255,255,255,255))
 	$Sprite.material.set_shader_param("flash_modifier", 1)
 	yield(get_tree().create_timer(0.1), "timeout")
 	$Sprite.material.set_shader_param("flash_modifier", 0.25)
 	yield(get_tree().create_timer(RECOIL_TIME), "timeout")
+
+func _do_refill_ani():
+	$Sprite.material.set_shader_param("flash_color", Color(0.97,0.63,0.27,1))
+	$Sprite.material.set_shader_param("flash_modifier", 1)
+	yield(get_tree().create_timer(0.2), "timeout")
 	$Sprite.material.set_shader_param("flash_modifier", 0)
 
 func _on_Teleporter_player_entered_teleporter(var teleport_to):
 	self.teleport_to = teleport_to
+	Sounds.get_node('teleport').play()
 	bool_do_teleport = true
 
 func do_hit(var body : Node2D):
@@ -280,3 +322,6 @@ func do_hit(var body : Node2D):
 	in_recoil = true
 	got_hit = true
 	TimerRecoil.start(RECOIL_TIME)
+
+func _on_TimerRefill_timeout():
+	do_refill = true

@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://sprite/player/player.png" type="Texture" id=2]
 [ext_resource path="res://sprite/player/eye.png" type="Texture" id=3]
 [ext_resource path="res://shaders/shader.shader" type="Shader" id=4]
+[ext_resource path="res://sprite/player/texture_refill.png" type="Texture" id=5]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
@@ -12,8 +13,18 @@ radius = 26.0
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 4 )
-shader_param/flash_color = Color( 1, 1, 1, 1 )
+shader_param/flash_color = Color( 0.968627, 0.627451, 0.27451, 1 )
 shader_param/flash_modifier = 0.0
+
+[sub_resource type="ParticlesMaterial" id=4]
+emission_shape = 2
+emission_box_extents = Vector3( 25, 1, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 80.0
+color = Color( 0.968627, 0.627451, 0.27451, 1 )
 
 [node name="Player" type="RigidBody2D"]
 collision_layer = 0
@@ -41,6 +52,19 @@ texture = ExtResource( 3 )
 one_shot = true
 
 [node name="TimerRecoil" type="Timer" parent="."]
+
+[node name="TimerRefill" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( -1.33176, 10.1804 )
+emitting = false
+amount = 5
+one_shot = true
+process_material = SubResource( 4 )
+texture = ExtResource( 5 )
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_Player_body_shape_entered"]
 [connection signal="timeout" from="TimerRecoil" to="." method="_on_TimerRecoil_timeout"]
+[connection signal="timeout" from="TimerRefill" to="." method="_on_TimerRefill_timeout"]

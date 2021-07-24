@@ -7,11 +7,18 @@ func _ready():
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, true)
 
 func _on_Lifetime_timeout():
-	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.BULLET, false)
-	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, false)
-
-	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PICKUP, true)
-	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PLAYER, true)
+	self.queue_free()
+	var child = Utility.reparent(self.get_node('Particles2D'), get_node("/root/MainScene"))
+	Utility.delay_queue_free(child, 0.3)
+	self.queue_free()
 	
-	if not $Particles2D == null:
-		$Particles2D.set_emitting(false)
+#	return
+#
+#	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.BULLET, false)
+#	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.ENEMY, false)
+#
+#	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.PICKUP, true)
+#	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PLAYER, true)
+#
+#	if not $Particles2D == null:
+#		$Particles2D.set_emitting(false)
