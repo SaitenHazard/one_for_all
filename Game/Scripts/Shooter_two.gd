@@ -8,6 +8,7 @@ onready var Eye = $Eye
 onready var Player = get_node("/root/MainScene/Player")
 onready var Bullet : Object = preload("res://Scenes/Bullet_enemy.tscn")
 onready var Utility = preload("res://Scripts/Utility.gd").new()
+onready var BULLET : Object = preload("res://Scenes/Bullet_enemy.tscn")
 
 onready var Sounds = get_node('/root/MainScene/Sounds')
 

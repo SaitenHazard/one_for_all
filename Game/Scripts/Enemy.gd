@@ -15,12 +15,13 @@ var on_floor : bool
 var linear_velocity_var : Vector2
 var linear_velocity_previous : Vector2
 var hit_ground : bool
-export var walk_direction : float = 1.0
 var dead : bool = false
 var lives : int = 1
 var jump : bool = false
 var got_hit : bool = false
 var hit_right : int = 0
+
+export var walk_direction : float = 1.0
 
 onready var Cooldown : Timer = $Cooldown
 onready var DeatTimer : Timer = $DeathTimer
