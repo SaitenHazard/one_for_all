@@ -27,9 +27,12 @@ onready var DeatTimer : Timer = $DeathTimer
 onready var Sprite_var : Sprite = $Sprite
 onready var RayCast2DLeft : RayCast2D = $RayCast2DLeft
 onready var RayCast2DRight : RayCast2D = $RayCast2DRight
+onready var Sounds = get_node('/root/MainScene/Sounds')
+onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
+#onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Enemies/Label')
 
 var Utility = preload("res://Scripts/Utility.gd").new()
-onready var Sounds = get_node('/root/MainScene/Sounds')
+
 
 var test : bool
 
@@ -150,6 +153,7 @@ func _on_Enemy2_body_entered(body):
 		_do_hit(body)
 
 func _do_hit(var body):
+	Enemy_count.substract_count()
 	Sounds.get_node('hit').play()
 	jump = true
 	got_hit = true

@@ -1,7 +1,7 @@
 extends RigidBody2D
 
 const MIN_SHOTS_ON_FLOOR : int = 1
-const WALK_ACCEL : float = 1000.0
+const WALK_ACCEL : float = 1500.0
 const WALK_DEACCEL : float  = 50.0
 const WALK_MAX_VELOCITY : float  = 700.0
 const AIR_ACCEL : float  = 800.0
@@ -17,7 +17,7 @@ const EYE_DISTANCE : float = 5.0
 const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
 
-export var shots_max : int = 3
+export var shots_max : int = 1
 
 var got_hit : bool = false
 var in_recoil : bool = false
@@ -32,7 +32,6 @@ var move_right : bool
 var shoot : bool
 var just_landed = false
 var just_refill_soundeffect = false
-
 var body_state
 var step : float
 var on_floor : bool
@@ -41,7 +40,8 @@ var linear_velocity_previous : Vector2
 var hit_ground : bool
 var hit_right
 var bool_do_reset : bool = false
-var teleport_to : String
+#var teleport_to : String
+var checkpoint_name : String = "Checkpoint"
 
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
@@ -51,14 +51,16 @@ onready var TimerRefill = $TimerRefill
 onready var PArticles2D = $Particles2D
 
 onready var Sounds = get_node('/root/MainScene/Sounds')
+onready var Checkpoints = get_node('/root/MainScene/Checkpoints').get_children()
 
 var Bullet : Object = preload("res://Scenes/Bullet.tscn")
 var Utility = preload("res://Scripts/Utility.gd").new()
 
-var checkpoint_name : String
-
-func set_checkpoint_name(name) -> void:
+func set_checkpoint(name) -> void:
 	checkpoint_name = name
+	for x in Checkpoints.size():
+		if not Checkpoints[x].name == checkpoint_name:
+			Checkpoints[x].set_checkpoint_off()
 
 func reset_to_checkpoint() -> void:
 	bool_do_reset = true
@@ -237,7 +239,7 @@ func _move_air():
 	if shoot:
 		self.set_global_position(Vector2(1,1))
 		linear_velocity_var.y = JUMP_VELOCITY * opposite_aim_direction.y
-		linear_velocity_var.x = JUMP_VELOCITY * opposite_aim_direction.x
+		linear_velocity_var.x = AIR_ACCEL * opposite_aim_direction.x
 #		offset for buggy replenish system
 		if abs(linear_velocity_var.x) < 100:
 			linear_velocity_var.x = 100
@@ -257,22 +259,21 @@ func _move_air():
 				linear_velocity_absolute = 0
 			linear_velocity_var.x = sign(linear_velocity_var.x) * linear_velocity_absolute
 
-func shots_remaining_add():
-	if shots_remaining == shots_max:
-		return
-	shots_remaining = shots_remaining + 1
+#func shots_remaining_add():
+#	if shots_remaining == shots_max:
+#		shots_remaining = shots_remaining + 1
 	
 func shots_max_add():
 	shots_max = shots_max + 1
 
 func _on_Player_body_entered(body):
-	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.PICKUP) and shots_remaining < shots_max:
-		if body.is_in_group('shots'):
-			shots_remaining_add()
-			body.queue_free()
-		elif body.is_in_group('slots'):
-			shots_max_add()
-		body.queue_free()
+#	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.PICKUP) and shots_remaining < shots_max:
+#		if body.is_in_group('shots'):
+#			shots_remaining_add()
+#			body.queue_free()
+#		elif body.is_in_group('slots'):
+#			shots_max_add()
+#		body.queue_free()
 		
 	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.ENEMY):
 		do_hit(body)
@@ -304,12 +305,12 @@ func _set_player_vincible() -> void:
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.TELEPORT, true)
 
 func _do_flash():
-	return
-#	$Sprite.material.set_shader_param("flash_color", Color(255,255,255,255))
+	$Sprite.material.set_shader_param("flash_color", Color(1,1,1,1))
 	$Sprite.material.set_shader_param("flash_modifier", 1)
-	yield(get_tree().create_timer(0.1), "timeout")
-	$Sprite.material.set_shader_param("flash_modifier", 0.25)
-	yield(get_tree().create_timer(RECOIL_TIME), "timeout")
+	yield(get_tree().create_timer(0.5), "timeout")
+	reset_to_checkpoint()
+	$Sprite.material.set_shader_param("flash_modifier", 0)
+	_set_player_vincible()
 
 func _do_refill_ani():
 	$Sprite.material.set_shader_param("flash_color", Color(0.97,0.63,0.27,1))
@@ -325,6 +326,7 @@ func _do_refill_ani():
 func do_hit(var body : Node2D):
 	_set_player_invincible()
 	_do_flash()
+	Sounds.get_node('hit').play()
 	hit_right = self.position.x < body.position.x
 	in_recoil = true
 	got_hit = true

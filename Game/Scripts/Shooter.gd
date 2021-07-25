@@ -12,6 +12,8 @@ var shoot_direction
 
 const SPEED : float = 500.0
 
+onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
+
 func _ready():
 	shoot_position = Position2DShooter.get_global_position()
 	_set_collision_layers()
@@ -44,6 +46,7 @@ func _on_Shooter_body_entered(body):
 		Player.do_hit(body)
 	
 func _do_hit(var body):
+	Enemy_count.substract_count()
 	Sounds.get_node('hit').play()
 	_do_hit_bullet(body)
 	_do_flash()

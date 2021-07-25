@@ -336,14 +336,14 @@ points = PoolVector2Array( 64, 64, 0, 64, 0, 0, 64, 0 )
 friction = 0.5
 
 [node name="MainScene" type="Node2D"]
-position = Vector2( 0, -23.7841 )
+position = Vector2( 968, -40 )
 
 [node name="Camera2D" parent="." instance=ExtResource( 3 )]
 
 [node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="Checkpoint" parent="Checkpoints" instance=ExtResource( 14 )]
-position = Vector2( 848, 967.784 )
+position = Vector2( -776, 967.784 )
 
 [node name="TileMap2" type="TileMap" parent="." groups=[
 "tile",
@@ -358,9 +358,8 @@ tile_data = PoolIntArray( -786225, 2, 0, -720715, 2, 0, -720689, 0, 0, -655179, 
 script = ExtResource( 9 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 520, 1135.78 )
+position = Vector2( 464, 1120 )
 physics_material_override = SubResource( 17 )
-gravity_scale = 8.5
 
 [node name="enemies" type="Node2D" parent="."]
 

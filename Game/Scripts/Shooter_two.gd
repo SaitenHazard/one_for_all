@@ -11,6 +11,8 @@ onready var Utility = preload("res://Scripts/Utility.gd").new()
 
 onready var Sounds = get_node('/root/MainScene/Sounds')
 
+onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
+
 var aim_direction
 
 func _ready():
@@ -46,6 +48,7 @@ func _on_ShooterTwo_body_entered(body):
 		Player.do_hit(body)
 
 func _do_hit(var body):
+	Enemy_count.substract_count()
 	Sounds.get_node('hit').play()
 	_do_hit_bullet(body)
 	_do_flash()

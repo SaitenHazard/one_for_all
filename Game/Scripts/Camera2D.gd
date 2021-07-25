@@ -12,7 +12,7 @@ func _process(delta):
 	var on_floor = player.get_is_on_floor()
 	var target = player_position + (TARGET_DISTANCE * aim_direction)
 	
-	var speed
+	var speed = 0
 	
 	if player.get_is_on_floor():
 		speed = lerp_speed_floor
