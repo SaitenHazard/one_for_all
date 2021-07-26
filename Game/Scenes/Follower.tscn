@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://sprite/ui/ui_bullet_slot.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/Follower.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=17]
+
+[node name="Follower" type="StaticBody2D"]
+position = Vector2( -72, 8 )
+collision_layer = 524288
+collision_mask = 524288
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 17 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )

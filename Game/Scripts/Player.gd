@@ -17,7 +17,7 @@ const EYE_DISTANCE : float = 5.0
 const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
 
-export var shots_max : int = 1
+export var shots_max : int = 3
 
 var got_hit : bool = false
 var in_recoil : bool = false
@@ -40,8 +40,9 @@ var linear_velocity_previous : Vector2
 var hit_ground : bool
 var hit_right
 var bool_do_reset : bool = false
-#var teleport_to : String
 var checkpoint_name : String = "Checkpoint"
+var Bullet : Object = preload("res://Scenes/Bullet.tscn")
+var Utility = preload("res://Scripts/Utility.gd").new()
 
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
@@ -52,9 +53,6 @@ onready var PArticles2D = $Particles2D
 
 onready var Sounds = get_node('/root/MainScene/Sounds')
 onready var Checkpoints = get_node('/root/MainScene/Checkpoints').get_children()
-
-var Bullet : Object = preload("res://Scenes/Bullet.tscn")
-var Utility = preload("res://Scripts/Utility.gd").new()
 
 func set_checkpoint(name) -> void:
 	checkpoint_name = name
@@ -67,9 +65,15 @@ func reset_to_checkpoint() -> void:
 
 func _ready() -> void:
 	_set_player_vincible()
+	
+func _process(delta):
+	_set_aim_direction()
+	_set_cooldown()
+	_do_animations(delta)
+	_set_eye_position()
 
 func _do_animations(delta) -> void:
-	var scale_lerp : Vector2
+	var scale_lerp : Vector2 = Vector2(0,0)
 	
 	if shoot or not on_floor:
 		hit_ground = false
@@ -94,12 +98,6 @@ func get_shots_max() -> int:
 func get_shots_remaining() -> int:
 	return shots_remaining
 
-func _process(delta):
-	_set_aim_direction()
-	_set_cooldown()
-	_do_animations(delta)
-	_set_eye_position()
-
 func get_aim_direction() -> Vector2:
 	return aim_direction
 	
@@ -113,8 +111,7 @@ func _set_cooldown():
 	in_cooldown = not Cooldown.is_stopped()
 	
 func _set_aim_direction():
-	var aim_direction = (get_global_mouse_position() - self.global_position).normalized()
-	self.aim_direction = aim_direction
+	aim_direction = (get_global_mouse_position() - self.global_position).normalized()
 	opposite_aim_direction = aim_direction * -1
 
 func _integrate_forces(body_state):
@@ -155,18 +152,23 @@ func _set_velocity():
 	linear_velocity_var += body_state.get_total_gravity() * step
 	body_state.set_linear_velocity(linear_velocity_var)
 	
+var just_shot = false
+	
 func _do_shoot():
+	if just_shot:
+		return
+		
+	just_shot = true
 	Sounds.get_node('jump').play()
-	
 	var bullet_m = Bullet.instance()
-	var pos = self.position
-	
 	bullet_m.global_position = self.global_position + (EYE_DISTANCE * aim_direction)
 	get_tree().get_root().add_child(bullet_m)
-
 	bullet_m.linear_velocity = aim_direction * BULLET_ACCEL
-	
 	shots_remaining = shots_remaining - 1
+	
+	yield(get_tree().create_timer(0.5), "timeout")
+	
+	just_shot = false
 
 func _get_input():
 	if in_recoil and not on_floor:
@@ -237,12 +239,9 @@ func _move_floor():
 
 func _move_air():
 	if shoot:
-		self.set_global_position(Vector2(1,1))
+#		self.set_global_position(Vector2(1,1))
 		linear_velocity_var.y = JUMP_VELOCITY * opposite_aim_direction.y
 		linear_velocity_var.x = AIR_ACCEL * opposite_aim_direction.x
-#		offset for buggy replenish system
-		if abs(linear_velocity_var.x) < 100:
-			linear_velocity_var.x = 100
 		
 	if not on_floor:
 		if move_left and not move_right:
