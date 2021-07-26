@@ -1,6 +1,6 @@
 extends Camera2D
 
-const TARGET_DISTANCE = 150
+const TARGET_DISTANCE = 250
 
 onready var player = get_node("/root/MainScene/Player")
 var lerp_speed_floor : float = 2.0

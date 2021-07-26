@@ -17,7 +17,7 @@ const EYE_DISTANCE : float = 5.0
 const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
 
-export var shots_max : int = 3
+export var shots_max : int = 1
 
 var got_hit : bool = false
 var in_recoil : bool = false
@@ -166,7 +166,7 @@ func _do_shoot():
 	bullet_m.linear_velocity = aim_direction * BULLET_ACCEL
 	shots_remaining = shots_remaining - 1
 	
-	yield(get_tree().create_timer(0.5), "timeout")
+	yield(get_tree().create_timer(0.25), "timeout")
 	
 	just_shot = false
 
