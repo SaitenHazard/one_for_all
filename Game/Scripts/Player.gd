@@ -56,6 +56,7 @@ onready var Arrow_shoot = $Arrow_shoot
 
 onready var Sounds = get_node('/root/MainScene/Sounds')
 onready var Checkpoints = get_node('/root/MainScene/Checkpoints').get_children()
+onready var Camera2D = get_node('/root/MainScene/Camera2D')
 
 func set_checkpoint(name) -> void:
 	checkpoint_name = name
@@ -338,6 +339,7 @@ func _do_refill_ani():
 #	bool_do_teleport = true
 
 func do_hit(var body : Node2D):
+	Camera2D.shake()
 	_set_player_invincible()
 	_do_flash()
 	Sounds.get_node('hit').play()
