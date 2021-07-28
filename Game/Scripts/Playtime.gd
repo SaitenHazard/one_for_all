@@ -10,7 +10,8 @@ func _ready():
 func _process(delta):
 	time_now = OS.get_unix_time()
 	var elapsed = time_now - time_start
-	var minutes = elapsed / 60
+	var hours = floor(elapsed / (3600))
+	var minutes = ((elapsed - (hours * 3600)))/60
 	var seconds = elapsed % 60
-	var str_elapsed = "%02d:%02d" % [minutes, seconds]
+	var str_elapsed = "%02d:%02d:%02d" % [hours, minutes, seconds]
 	self.text = str_elapsed

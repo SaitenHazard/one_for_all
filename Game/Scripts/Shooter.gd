@@ -6,6 +6,7 @@ onready var Utility = preload("res://Scripts/Utility.gd").new()
 
 onready var Player = get_node("/root/MainScene/Player")
 onready var Sounds = get_node('/root/MainScene/Sounds')
+onready var Camera2D = get_node('/root/MainScene/Camera2D')
 
 var shoot_position : Vector2
 var shoot_direction
@@ -46,6 +47,7 @@ func _on_Shooter_body_entered(body):
 		Player.do_hit(body)
 	
 func _do_hit(var body):
+	Camera2D.shake()
 	Enemy_count.substract_count()
 	Sounds.get_node('hit').play()
 	_do_hit_bullet(body)
@@ -59,4 +61,7 @@ func _do_hit_bullet(body):
 func _do_flash():
 	$Sprite.material.set_shader_param("flash_modifier", 1)
 	yield(get_tree().create_timer(0.1), "timeout")
+	$Particles2D.emitting = true
+	var child = Utility.reparent($Particles2D, get_node("/root/MainScene"))
+	Utility.delay_queue_free($Particles2D, 2)
 	self.queue_free()

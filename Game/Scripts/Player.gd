@@ -16,6 +16,7 @@ const REFILLCOOLDOWN  : float = 1.0
 const EYE_DISTANCE : float = 5.0
 const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
+const ARROW_JUMP_DISTANCE : float = 60.0
 
 export var shots_max : int = 1
 
@@ -50,6 +51,8 @@ onready var Eye : Sprite = $Eye
 onready var TimerRecoil = $TimerRecoil
 onready var TimerRefill = $TimerRefill
 onready var PArticles2D = $Particles2D
+onready var Arrow_jump = $Arrow_jump
+onready var Arrow_shoot = $Arrow_shoot
 
 onready var Sounds = get_node('/root/MainScene/Sounds')
 onready var Checkpoints = get_node('/root/MainScene/Checkpoints').get_children()
@@ -64,6 +67,7 @@ func reset_to_checkpoint() -> void:
 	bool_do_reset = true
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	_set_player_vincible()
 	
 func _process(delta):
@@ -71,6 +75,17 @@ func _process(delta):
 	_set_cooldown()
 	_do_animations(delta)
 	_set_eye_position()
+	_set_arrow_jump_position()
+	_set_arrow_shoot_position()
+
+func _set_arrow_shoot_position():
+	Arrow_shoot.set_global_position(get_global_mouse_position())
+	Arrow_shoot.rotation = Arrow_jump.rotation - 3.14
+	
+func _set_arrow_jump_position():
+	Arrow_jump.global_position = self.global_position + (ARROW_JUMP_DISTANCE * opposite_aim_direction)
+	Arrow_jump.look_at(get_global_mouse_position())
+#	Arrow_jump.rotation = PI + atan2(opposite_aim_direction.x, opposite_aim_direction.y)
 
 func _do_animations(delta) -> void:
 	var scale_lerp : Vector2 = Vector2(0,0)

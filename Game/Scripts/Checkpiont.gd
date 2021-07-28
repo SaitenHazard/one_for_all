@@ -10,15 +10,13 @@ onready var Sounds = get_node('/root/MainScene/Sounds')
 
 export var on : bool = false
 
-func _ready():
-	print(Player)
-
 func _on_Checkpoint_body_entered(body):
 	if body.name == 'Player':
 		_set_checkpoint_on()
 		
 func _set_checkpoint_on():
 	if not on:
+		$AnimationPlayer.play('swing')
 		Sounds.get_node('checkpoint').play()
 	Player.set_checkpoint(self.name)
 	on = true
