@@ -30,10 +30,13 @@ config/name="One For All"
 run/main_scene="res://Scenes/MainScene2.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+ParticlesCache="*res://ParticlesCache.gd"
+
 [display]
 
 window/size/resizable=false
-window/size/fullscreen=true
 window/stretch/mode="viewport"
 
 [input]

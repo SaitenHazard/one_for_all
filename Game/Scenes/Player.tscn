@@ -28,12 +28,12 @@ contact_monitor = true
 script = ExtResource( 1 )
 
 [node name="Arrow_jump" type="Sprite" parent="."]
-modulate = Color( 1, 1, 1, 0.501961 )
+modulate = Color( 0.584314, 0.807843, 0.803922, 0.498039 )
 position = Vector2( -3.77008, -27.1842 )
 texture = ExtResource( 6 )
 
 [node name="Arrow_shoot" type="Sprite" parent="."]
-modulate = Color( 1, 1, 1, 0.501961 )
+modulate = Color( 0.933333, 0.933333, 0.466667, 0.501961 )
 position = Vector2( -2.35426, -39.4546 )
 texture = ExtResource( 6 )
 

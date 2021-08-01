@@ -10,3 +10,12 @@ func _ready():
 func substract_count():
 	count = count - 1
 	self.text = str(count)
+	
+	if count == 0:
+		_save_best_time()
+
+func _save_best_time():
+	pass
+
+func get_count() -> int:
+	return count

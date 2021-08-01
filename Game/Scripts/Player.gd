@@ -18,7 +18,7 @@ const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
 const ARROW_JUMP_DISTANCE : float = 60.0
 
-export var shots_max : int = 1
+export var shots_max : int = 4
 
 var got_hit : bool = false
 var in_recoil : bool = false
@@ -44,6 +44,8 @@ var bool_do_reset : bool = false
 var checkpoint_name : String = "Checkpoint"
 var Bullet : Object = preload("res://Scenes/Bullet.tscn")
 var Utility = preload("res://Scripts/Utility.gd").new()
+
+var start : bool = false
 
 onready var Cooldown : Timer = $Cooldown
 onready var Sprite_var : Sprite = $Sprite
@@ -185,6 +187,9 @@ func _do_shoot():
 	yield(get_tree().create_timer(0.25), "timeout")
 	
 	just_shot = false
+	
+func get_start() -> bool:
+	return start
 
 func _get_input():
 	if in_recoil and not on_floor:
@@ -195,6 +200,9 @@ func _get_input():
 	
 	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown
 	
+	if move_left or move_right or shoot:
+		start = true
+		
 	if shoot:
 		just_refill_soundeffect = false
 		do_refill = false

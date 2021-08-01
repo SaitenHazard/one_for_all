@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scripts/UIShots.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Camera2D.gd" type="Script" id=2]
@@ -7,12 +7,13 @@
 [ext_resource path="res://sprite/ui/ui_enemy.png" type="Texture" id=5]
 [ext_resource path="res://Scenes/UI_enemy_count.gd" type="Script" id=6]
 [ext_resource path="res://Scripts/Playtime.gd" type="Script" id=7]
+[ext_resource path="res://Scripts/BestTime.gd" type="Script" id=8]
 
-[sub_resource type="DynamicFontData" id=1]
+[sub_resource type="DynamicFontData" id=17]
 font_path = "res://fonts/PressStart2P-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=2]
-font_data = SubResource( 1 )
+[sub_resource type="DynamicFont" id=18]
+font_data = SubResource( 17 )
 
 [node name="Camera2D" type="Camera2D"]
 position = Vector2( -1368, 959.784 )
@@ -28,6 +29,38 @@ margin_top = 20.0
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTime" type="Label" parent="CanvasLayer/Control"]
+anchor_left = -0.734
+anchor_bottom = 0.25
+margin_left = 346.68
+margin_top = 180.0
+margin_right = 636.0
+margin_bottom = 204.0
+custom_fonts/font = SubResource( 18 )
+text = "Best Time: 00:00:00"
+align = 1
+valign = 1
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTime2" type="Label" parent="CanvasLayer/Control"]
+anchor_left = -0.734
+anchor_bottom = 0.25
+margin_left = 186.68
+margin_top = 228.0
+margin_right = 812.0
+margin_bottom = 252.0
+custom_fonts/font = SubResource( 18 )
+text = "Controls: A, D, Mouse, Left Mouse Button"
+align = 1
+valign = 1
+script = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -55,7 +88,7 @@ margin_left = 405.748
 margin_top = 518.103
 margin_right = 600.748
 margin_bottom = 587.103
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 18 )
 text = "00:00:00"
 script = ExtResource( 7 )
 __meta__ = {
@@ -79,7 +112,7 @@ margin_left = -34.8067
 margin_top = 2.21415
 margin_right = 19.7053
 margin_bottom = 26.2141
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 18 )
 text = "10"
 align = 1
 valign = 1

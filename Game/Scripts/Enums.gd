@@ -9,4 +9,5 @@ enum COLLISION_LAYER {
 	TELEPORT = 5,
 	BULLET_ENEMY = 6,
 	TILE = 7,
+	BLOCK = 8,
 }

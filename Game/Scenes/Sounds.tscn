@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://sounds/jump.wav" type="AudioStream" id=1]
 [ext_resource path="res://sounds/land.wav" type="AudioStream" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://sounds/teleport.wav" type="AudioStream" id=5]
 [ext_resource path="res://sounds/checkpoint.wav" type="AudioStream" id=6]
 [ext_resource path="res://sounds/background.wav" type="AudioStream" id=7]
+[ext_resource path="res://sounds/powerup.wav" type="AudioStream" id=8]
 
 [node name="Sounds" type="Node2D"]
 
@@ -34,5 +35,10 @@ volume_db = -20.0
 
 [node name="background" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )
+volume_db = -25.0
+autoplay = true
+
+[node name="powerup" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
 volume_db = -25.0
 autoplay = true

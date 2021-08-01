@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/Enemy2.gd" type="Script" id=1]
 [ext_resource path="res://sprite/enemies/enemy.png" type="Texture" id=2]
 [ext_resource path="res://shaders/shader.shader" type="Shader" id=3]
+[ext_resource path="res://particles_enemy_bullet.tres" type="Material" id=4]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
@@ -31,25 +32,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 0, 1 ]
 }
-
-[sub_resource type="Gradient" id=5]
-offsets = PoolRealArray( 0.00254453, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
-
-[sub_resource type="GradientTexture" id=6]
-gradient = SubResource( 5 )
-
-[sub_resource type="ParticlesMaterial" id=7]
-emission_shape = 1
-emission_sphere_radius = 20.0
-flag_disable_z = true
-gravity = Vector3( 0, -60, 0 )
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-linear_accel = 10.0
-radial_accel = 10.0
-scale = 10.0
-color_ramp = SubResource( 6 )
 
 [node name="Enemy2" type="RigidBody2D"]
 collision_layer = 0
@@ -106,7 +88,7 @@ emitting = false
 amount = 10
 one_shot = true
 explosiveness = 1.0
-process_material = SubResource( 7 )
+process_material = ExtResource( 4 )
 [connection signal="body_entered" from="." to="." method="_on_Enemy2_body_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="timeout" from="Cooldown" to="." method="_on_Cooldown_timeout"]
