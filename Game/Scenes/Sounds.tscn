@@ -26,6 +26,11 @@ volume_db = -30.0
 stream = ExtResource( 4 )
 volume_db = -5.0
 
+[node name="hit2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+volume_db = -5.0
+pitch_scale = 0.1
+
 [node name="teleport" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )
 

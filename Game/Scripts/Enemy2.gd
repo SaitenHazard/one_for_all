@@ -42,6 +42,8 @@ var test : bool
 
 var shoot_direction : Vector2
 
+onready var VisibilityNotifier2D_ = $VisibilityNotifier2D
+
 func _set_bullet_direction():
 	shoot_direction = (shoot_position - self.get_global_position()).normalized()
 	shoot_direction = shoot_direction.normalized()
@@ -211,6 +213,9 @@ func _on_Timer_timeout():
 	_do_shoot()
 	
 func _do_shoot():
+	if not VisibilityNotifier2D_.is_on_screen():
+		return
+		
 	var bullet = BULLET.instance()
 	bullet.position = shoot_position
 	get_tree().get_root().add_child(bullet)

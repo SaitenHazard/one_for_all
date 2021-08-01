@@ -71,10 +71,6 @@ position = Vector2( 25.858, 0 )
 ]]
 autostart = true
 
-[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
-scale = Vector2( 10, 10 )
-pause_particles = false
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "walk"
 anims/walk = SubResource( 3 )
@@ -85,5 +81,8 @@ amount = 10
 one_shot = true
 explosiveness = 1.0
 process_material = SubResource( 6 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+scale = Vector2( 100, 100 )
 [connection signal="body_entered" from="." to="." method="_on_Shooter_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

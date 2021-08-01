@@ -14,6 +14,8 @@ onready var Sounds = get_node('/root/MainScene/Sounds')
 onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
 onready var Camera2D = get_node('/root/MainScene/Camera2D')
 
+onready var VisibilityNotifier2D_ = $VisibilityNotifier2D
+
 var aim_direction
 
 func _ready():
@@ -38,6 +40,9 @@ func _on_Timer_timeout():
 	_do_shoot()
 
 func _do_shoot():
+	if not VisibilityNotifier2D_.is_on_screen():
+		return
+		
 	var bullet = Bullet.instance()
 	bullet.position = self.get_global_position()
 	get_tree().get_root().add_child(bullet)

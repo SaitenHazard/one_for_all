@@ -663,6 +663,6 @@ position = Vector2( 5280, -488 )
 position = Vector2( 12648, 472 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 22184, -2200 )
+position = Vector2( 22320, -2304 )
 linear_damp = 0.0
 angular_damp = 0.0

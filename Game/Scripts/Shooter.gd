@@ -15,6 +15,8 @@ const SPEED : float = 500.0
 
 onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
 
+onready var VisibilityNotifier2D_ = $VisibilityNotifier2D
+
 func _ready():
 	shoot_position = Position2DShooter.get_global_position()
 	_set_collision_layers()
@@ -35,6 +37,9 @@ func _on_Timer_timeout():
 	_do_shoot()
 	
 func _do_shoot():
+	if not VisibilityNotifier2D_.is_on_screen():
+		return
+		
 	var bullet = BULLET.instance()
 	bullet.position = shoot_position
 	get_tree().get_root().add_child(bullet)

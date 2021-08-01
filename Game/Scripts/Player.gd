@@ -301,6 +301,9 @@ func _on_Player_body_entered(body):
 	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.ENEMY):
 		do_hit(body)
 		
+	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.BLOCK):
+		do_hit(body)
+		
 	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.BULLET_ENEMY):
 		do_hit(body)
 
