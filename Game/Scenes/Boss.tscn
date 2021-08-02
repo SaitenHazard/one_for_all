@@ -148,6 +148,28 @@ texture = ExtResource( 4 )
 
 [node name="Sprite5" type="Sprite" parent="Healths"]
 position = Vector2( 160, 104 )
+texture = ExtResource( 4 )
+
+[node name="HealthBacks" type="Node2D" parent="."]
+
+[node name="Sprite4" type="Sprite" parent="HealthBacks"]
+position = Vector2( -160, 104 )
+texture = ExtResource( 6 )
+
+[node name="Sprite3" type="Sprite" parent="HealthBacks"]
+position = Vector2( -80, 104 )
+texture = ExtResource( 6 )
+
+[node name="Sprite" type="Sprite" parent="HealthBacks"]
+position = Vector2( 0, 104 )
+texture = ExtResource( 6 )
+
+[node name="Sprite2" type="Sprite" parent="HealthBacks"]
+position = Vector2( 80, 104 )
+texture = ExtResource( 6 )
+
+[node name="Sprite5" type="Sprite" parent="HealthBacks"]
+position = Vector2( 160, 104 )
 texture = ExtResource( 6 )
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Enemy2_body_entered"]

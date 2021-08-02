@@ -204,7 +204,9 @@ func _do_death():
 onready var healths =  get_node("Healths").get_children()
 
 func _healt_manager():
-	pass
+	for i in healths.size():
+		if lives - 1 < i:
+			healths[i].visible = false
 
 func _do_hit_bullet(body):
 	body.queue_free()
