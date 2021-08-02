@@ -36,6 +36,9 @@ var Utility = preload("res://Scripts/Utility.gd").new()
 var start_boss : bool
 
 onready var Player = get_node('/root/MainScene/Player')
+onready var Timer_ = $Timer
+
+onready var BULLET : Object = preload("res://Scenes/Bullet_enemy2.tscn")
 
 func _ready():
 	Utility.set_collision_layer(self, Enums.COLLISION_LAYER.ENEMY, true)
@@ -47,6 +50,7 @@ func _ready():
 
 func _process(delta):
 	_do_animations(delta)
+	_healt_manager()
 #	_do_death()
 	
 #func _do_death():
@@ -81,6 +85,7 @@ func _do_animations(delta) -> void:
 func start_boss():
 	yield(get_tree().create_timer(0.5), "timeout")
 	start_boss = true
+	Timer_.start(SHOOT_TIMER)
 
 func _integrate_forces(body_state):
 	if not start_boss:
@@ -108,6 +113,9 @@ func _set_velocity():
 	else:
 		walk_direction = 1
 		linear_velocity_var.x = WALK_VELOCITY
+		
+	if start_shoot:
+		linear_velocity_var.x = 0
 		
 	linear_velocity_var += body_state.get_total_gravity() * step
 	body_state.set_linear_velocity(linear_velocity_var)
@@ -165,7 +173,6 @@ func _on_Enemy2_body_entered(body):
 
 func _do_hit(var body):
 	Camera2D.shake()
-	Enemy_count.substract_count()
 	Sounds.get_node('hit').play()
 	jump = true
 	got_hit = true
@@ -178,9 +185,8 @@ func _do_hit(var body):
 func _do_flash():
 	$Sprite.material.set_shader_param("flash_modifier", 1)
 	yield(get_tree().create_timer(0.5), "timeout")
-		
-#	yield(get_tree().create_timer(0.1), "timeout")
-#	$Sprite.material.set_shader_param("flash_modifier", 0)
+	$Sprite.material.set_shader_param("flash_modifier", 0)
+	_do_death()
 
 func _do_death():
 	if not lives == 0:
@@ -192,6 +198,13 @@ func _do_death():
 	
 	$DeathTimer.start()
 	self.queue_free()
+	
+	Enemy_count.substract_count()
+	
+onready var healths =  get_node("Healths").get_children()
+
+func _healt_manager():
+	pass
 
 func _do_hit_bullet(body):
 	body.queue_free()
@@ -203,3 +216,46 @@ func _on_Cooldown_timeout():
 
 func _on_DeathTimer_timeout():
 	self.queue_free()
+
+func _on_Timer_timeout():
+	_do_shoot()
+	
+var shoot_one_b : bool = false
+
+const SPEED : float = 500.0
+const SHOOT_TIMER  : float = 2.0
+
+var start_shoot = false
+	
+func _do_shoot():
+	start_shoot = true
+	
+	yield(get_tree().create_timer(0.75), "timeout")
+	
+	if shoot_one_b:
+		shoot_one_b = false
+	else:
+		shoot_one_b = true
+		
+	shoot_one_b = true
+		
+	if shoot_one_b:
+		_do_bullet(Vector2(0,0), Vector2(0,-1))
+		_do_bullet(Vector2(0,0), Vector2(1,-1))
+		_do_bullet(Vector2(0,0), Vector2(-1,-1))
+		_do_bullet(Vector2(0,0), Vector2(1,0))
+		_do_bullet(Vector2(0,0), Vector2(-1,0))
+	else:
+		pass
+		
+	yield(get_tree().create_timer(0.5), "timeout")
+	
+	start_shoot = false
+	Timer_.start(SHOOT_TIMER)
+
+func _do_bullet(var position, var direction):
+	var direction_m = direction.normalized()
+	var bullet = BULLET.instance()
+	bullet.global_position = self.global_position + (direction_m * 100)
+	get_tree().get_root().add_child(bullet)
+	bullet.linear_velocity = SPEED * direction_m.normalized()

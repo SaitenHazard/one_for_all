@@ -1,9 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scripts/Boss.gd" type="Script" id=1]
 [ext_resource path="res://sprite/enemies/boss.png" type="Texture" id=2]
 [ext_resource path="res://shaders/shader.shader" type="Shader" id=3]
+[ext_resource path="res://sprite/enemies/health.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/Block.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sprite/enemies/health_0.png" type="Texture" id=6]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
@@ -111,12 +113,6 @@ position = Vector2( -32, -104 )
 [node name="Sprite3" parent="Blocks" instance=ExtResource( 5 )]
 position = Vector2( 32, -104 )
 
-[node name="Sprite4" parent="Blocks" instance=ExtResource( 5 )]
-position = Vector2( -104, -32 )
-
-[node name="Sprite7" parent="Blocks" instance=ExtResource( 5 )]
-position = Vector2( 104, -32 )
-
 [node name="Sprite8" parent="Blocks" instance=ExtResource( 5 )]
 position = Vector2( 104, 0 )
 
@@ -128,6 +124,32 @@ position = Vector2( -104, 32 )
 
 [node name="Sprite6" parent="Blocks" instance=ExtResource( 5 )]
 position = Vector2( -104, 0 )
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Healths" type="Node2D" parent="."]
+
+[node name="Sprite4" type="Sprite" parent="Healths"]
+position = Vector2( -160, 104 )
+texture = ExtResource( 4 )
+
+[node name="Sprite3" type="Sprite" parent="Healths"]
+position = Vector2( -80, 104 )
+texture = ExtResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="Healths"]
+position = Vector2( 0, 104 )
+texture = ExtResource( 4 )
+
+[node name="Sprite2" type="Sprite" parent="Healths"]
+position = Vector2( 80, 104 )
+texture = ExtResource( 4 )
+
+[node name="Sprite5" type="Sprite" parent="Healths"]
+position = Vector2( 160, 104 )
+texture = ExtResource( 6 )
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Enemy2_body_entered"]
 [connection signal="timeout" from="Cooldown" to="." method="_on_Cooldown_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

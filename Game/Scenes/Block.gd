@@ -10,8 +10,10 @@ func _ready():
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.PLAYER, true)
 	Utility.set_collision_mask(self, Enums.COLLISION_LAYER.BULLET, true)
 
-
 func _on_Area2D_body_entered(body):
+	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.PLAYER):
+		Player.do_hit(self)
+		
 	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.BULLET):
 		_do_hit_bullet(body)
 		Sounds.get_node('hit2').play()
@@ -19,8 +21,6 @@ func _on_Area2D_body_entered(body):
 		yield(get_tree().create_timer(0.5), "timeout")
 		$Sprite.material.set_shader_param("flash_modifier", 0)
 		
-	if body.get_collision_layer_bit(Enums.COLLISION_LAYER.PLAYER):
-		Player.do_hit(self)
 
 func _do_hit_bullet(body):
 	body.queue_free()
