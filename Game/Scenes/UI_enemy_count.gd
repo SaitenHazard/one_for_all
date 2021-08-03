@@ -12,7 +12,7 @@ func substract_count():
 	self.text = str(count)
 	
 	if count == 0:
-		_save_best_time()
+		get_parent().get_node('Playtime').set_start_false()
 
 func _save_best_time():
 	pass

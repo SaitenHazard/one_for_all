@@ -18,7 +18,7 @@ const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
 const ARROW_JUMP_DISTANCE : float = 60.0
 
-export var shots_max : int = 4
+export var shots_max : int = 1
 
 var got_hit : bool = false
 var in_recoil : bool = false
@@ -192,13 +192,19 @@ func get_start() -> bool:
 	return start
 
 func _get_input():
+	if Input.is_action_pressed("quit"):
+		get_tree().quit()
+		
+	if Input.is_action_pressed("reload"):
+		get_tree().reload_current_scene()
+		
 	if in_recoil and not on_floor:
 		return
 		
 	move_left = Input.is_action_pressed("move_left")
 	move_right = Input.is_action_pressed("move_right")
-	
 	shoot = Input.is_action_pressed("shoot") and shots_remaining > 0 and not in_cooldown
+	
 	
 	if move_left or move_right or shoot:
 		start = true

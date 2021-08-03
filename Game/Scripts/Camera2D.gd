@@ -44,6 +44,7 @@ func _lerp_to_player(delta):
 func _do_shake(delta):
 	if _timer == 0:
 		return
+		
 	_last_shook_timer = _last_shook_timer + delta
 	while _last_shook_timer >= _period_in_ms:
 		_last_shook_timer = _last_shook_timer - _period_in_ms

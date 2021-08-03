@@ -10,6 +10,7 @@
 [ext_resource path="res://sounds/powerup.wav" type="AudioStream" id=8]
 
 [node name="Sounds" type="Node2D"]
+pause_mode = 2
 
 [node name="jump" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 1 )
@@ -46,4 +47,3 @@ autoplay = true
 [node name="powerup" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )
 volume_db = -25.0
-autoplay = true

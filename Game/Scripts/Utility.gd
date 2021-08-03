@@ -23,4 +23,8 @@ func delay_queue_free(var node : Node, var delay_in_seconds : float) -> void:
 		return null
 		
 	yield(node.get_tree().create_timer(delay_in_seconds), "timeout")
+	
+	if not node:
+		return null
+	
 	node.queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/UIShots.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Camera2D.gd" type="Script" id=2]
@@ -8,14 +8,45 @@
 [ext_resource path="res://Scenes/UI_enemy_count.gd" type="Script" id=6]
 [ext_resource path="res://Scripts/Playtime.gd" type="Script" id=7]
 [ext_resource path="res://Scripts/BestTime.gd" type="Script" id=8]
+[ext_resource path="res://Scenes/Camera2D.tres" type="DynamicFont" id=9]
+[ext_resource path="res://sprite/splash.png" type="Texture" id=10]
+[ext_resource path="res://Scenes/Splat.gd" type="Script" id=11]
+[ext_resource path="res://Scenes/BestTime2.gd" type="Script" id=12]
 
-[sub_resource type="DynamicFontData" id=17]
+[sub_resource type="DynamicFontData" id=1]
 font_path = "res://fonts/PressStart2P-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=18]
-font_data = SubResource( 17 )
+[sub_resource type="DynamicFont" id=2]
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 12
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=5]
+font_data = SubResource( 1 )
+
+[sub_resource type="Animation" id=6]
+resource_name = "New Anim"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
 [node name="Camera2D" type="Camera2D"]
+pause_mode = 2
 position = Vector2( -1368, 959.784 )
 current = true
 zoom = Vector2( 1.5, 1.5 )
@@ -24,6 +55,7 @@ script = ExtResource( 2 )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
+pause_mode = 1
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 40.0
@@ -36,11 +68,11 @@ __meta__ = {
 [node name="BestTime" type="Label" parent="CanvasLayer/Control"]
 anchor_left = -0.734
 anchor_bottom = 0.25
-margin_left = 346.68
-margin_top = 180.0
-margin_right = 636.0
-margin_bottom = 204.0
-custom_fonts/font = SubResource( 18 )
+margin_left = 345.558
+margin_top = 233.878
+margin_right = 634.878
+margin_bottom = 257.878
+custom_fonts/font = SubResource( 2 )
 text = "Best Time: 00:00:00"
 align = 1
 valign = 1
@@ -52,20 +84,74 @@ __meta__ = {
 [node name="BestTime2" type="Label" parent="CanvasLayer/Control"]
 anchor_left = -0.734
 anchor_bottom = 0.25
-margin_left = 186.68
-margin_top = 228.0
-margin_right = 812.0
-margin_bottom = 252.0
-custom_fonts/font = SubResource( 18 )
-text = "Controls: A, D, Mouse, Left Mouse Button"
+margin_left = 5.10194
+margin_top = 490.329
+margin_right = 362.422
+margin_bottom = 557.329
+custom_fonts/font = ExtResource( 9 )
+text = "Left: A
+Right: D
+Jump/Shoot: MouseButtonLeft
+Restart: R
+Quit: Esc"
+valign = 1
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTime3" type="Label" parent="CanvasLayer/Control"]
+anchor_left = -0.734
+anchor_bottom = 0.25
+margin_left = 184.68
+margin_top = -20.8111
+margin_right = 810.0
+margin_bottom = 59.1889
+custom_fonts/font = SubResource( 3 )
+text = "Fire! Fight! Flight?"
 align = 1
 valign = 1
-script = ExtResource( 8 )
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTime4" type="Label" parent="CanvasLayer/Control"]
+anchor_left = -0.734
+anchor_bottom = 0.25
+margin_left = 315.435
+margin_top = 24.8369
+margin_right = 668.755
+margin_bottom = 64.8369
+custom_fonts/font = SubResource( 4 )
+text = "by KhaliCanvas Studios"
+align = 1
+valign = 1
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTime5" type="Label" parent="CanvasLayer/Control"]
+anchor_left = -0.734
+anchor_bottom = 0.25
+margin_left = 314.435
+margin_top = 374.044
+margin_right = 667.755
+margin_bottom = 414.044
+custom_fonts/font = SubResource( 4 )
+text = "Music by Origami Repetika
+
+Pallete by Poly Phorge"
+align = 1
+valign = 1
+script = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Slots" type="TextureRect" parent="CanvasLayer/Control"]
+pause_mode = 2
 margin_right = 8.0
 margin_bottom = 8.0
 texture = ExtResource( 4 )
@@ -75,6 +161,7 @@ __meta__ = {
 }
 
 [node name="Shots" type="TextureRect" parent="CanvasLayer/Control"]
+pause_mode = 2
 margin_right = 32.0
 margin_bottom = 32.0
 texture = ExtResource( 3 )
@@ -88,9 +175,25 @@ margin_left = 405.748
 margin_top = 518.103
 margin_right = 600.748
 margin_bottom = 587.103
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = SubResource( 5 )
 text = "00:00:00"
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/Control"]
+anchor_left = -0.734
+anchor_bottom = 0.25
+margin_left = 911.137
+margin_top = 2.40314
+margin_right = 965.649
+margin_bottom = 26.4031
+custom_fonts/font = SubResource( 5 )
+text = "10"
+align = 1
+valign = 1
+script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -105,18 +208,27 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="CanvasLayer/Control/Enemies"]
-anchor_left = -0.734
-anchor_bottom = 0.25
-margin_left = -34.8067
-margin_top = 2.21415
-margin_right = 19.7053
-margin_bottom = 26.2141
-custom_fonts/font = SubResource( 18 )
-text = "10"
-align = 1
-valign = 1
-script = ExtResource( 6 )
+[node name="Control2" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Splat" type="TextureRect" parent="CanvasLayer/Control2"]
+pause_mode = 2
+modulate = Color( 1, 1, 1, 0.2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 7
+script = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Control2/Splat"]
+autoplay = "New Anim"
+"anims/New Anim" = SubResource( 6 )
+[connection signal="animation_finished" from="CanvasLayer/Control2/Splat/AnimationPlayer" to="CanvasLayer/Control2/Splat" method="_on_AnimationPlayer_animation_finished"]

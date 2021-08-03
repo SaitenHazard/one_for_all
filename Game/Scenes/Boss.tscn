@@ -44,14 +44,14 @@ gradient = SubResource( 5 )
 
 [sub_resource type="ParticlesMaterial" id=7]
 emission_shape = 1
-emission_sphere_radius = 20.0
+emission_sphere_radius = 60.0
 flag_disable_z = true
 gravity = Vector3( 0, -60, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 linear_accel = 10.0
 radial_accel = 10.0
-scale = 10.0
+scale = 30.0
 color_ramp = SubResource( 6 )
 
 [node name="Boss" type="RigidBody2D"]
@@ -127,6 +127,7 @@ position = Vector2( -104, 0 )
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+autostart = true
 
 [node name="Healths" type="Node2D" parent="."]
 
@@ -171,6 +172,9 @@ texture = ExtResource( 6 )
 [node name="Sprite5" type="Sprite" parent="HealthBacks"]
 position = Vector2( 160, 104 )
 texture = ExtResource( 6 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+pause_particles = false
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Enemy2_body_entered"]
 [connection signal="timeout" from="Cooldown" to="." method="_on_Cooldown_timeout"]

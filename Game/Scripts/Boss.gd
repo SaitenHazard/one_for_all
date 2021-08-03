@@ -33,7 +33,6 @@ onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control
 onready var Camera2D = get_node('/root/MainScene/Camera2D')
 
 var Utility = preload("res://Scripts/Utility.gd").new()
-var start_boss : bool
 
 onready var Player = get_node('/root/MainScene/Player')
 onready var Timer_ = $Timer
@@ -82,15 +81,7 @@ func _do_animations(delta) -> void:
 	Sprite_var.scale.x = lerp(Sprite_var.scale.x, 1, 1-pow(0.01, delta))
 	Sprite_var.scale.y = lerp(Sprite_var.scale.y, 1, 1-pow(0.01, delta))
 
-func start_boss():
-	yield(get_tree().create_timer(0.5), "timeout")
-	start_boss = true
-	Timer_.start(SHOOT_TIMER)
-
 func _integrate_forces(body_state):
-	if not start_boss:
-		return
-		
 	self.body_state = body_state
 	_set_body_state()
 	_move_air()
@@ -196,7 +187,7 @@ func _do_death():
 	var child = Utility.reparent($Particles2D, get_node("/root/MainScene"))
 	Utility.delay_queue_free($Particles2D, 2)
 	
-	$DeathTimer.start()
+#	$DeathTimer.start()
 	self.queue_free()
 	
 	Enemy_count.substract_count()
@@ -216,9 +207,6 @@ func _do_hit_bullet(body):
 func _on_Cooldown_timeout():
 	got_hit = false
 
-func _on_DeathTimer_timeout():
-	self.queue_free()
-
 func _on_Timer_timeout():
 	_do_shoot()
 	
@@ -230,6 +218,9 @@ const SHOOT_TIMER  : float = 2.0
 var start_shoot = false
 	
 func _do_shoot():
+	if not $VisibilityEnabler2D.is_on_screen():
+		return
+	
 	start_shoot = true
 	
 	yield(get_tree().create_timer(0.75), "timeout")
