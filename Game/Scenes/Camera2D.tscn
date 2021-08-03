@@ -91,8 +91,22 @@ margin_bottom = 557.329
 custom_fonts/font = ExtResource( 9 )
 text = "Left: A
 Right: D
-Jump/Shoot: MouseButtonLeft
-Restart: R
+Jump/Shoot: MouseButtonLeft"
+valign = 1
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTime6" type="Label" parent="CanvasLayer/Control"]
+anchor_left = -0.734
+anchor_bottom = 0.25
+margin_left = 863.928
+margin_top = 494.784
+margin_right = 1221.25
+margin_bottom = 561.784
+custom_fonts/font = ExtResource( 9 )
+text = "Restart: R
 Quit: Esc"
 valign = 1
 script = ExtResource( 12 )

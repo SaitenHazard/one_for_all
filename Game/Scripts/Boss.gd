@@ -29,7 +29,7 @@ onready var Sprite_var : Sprite = $Sprite
 onready var RayCast2DLeft : RayCast2D = $RayCast2DLeft
 onready var RayCast2DRight : RayCast2D = $RayCast2DRight
 onready var Sounds = get_node('/root/MainScene/Sounds')
-onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
+onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Label')
 onready var Camera2D = get_node('/root/MainScene/Camera2D')
 
 var Utility = preload("res://Scripts/Utility.gd").new()

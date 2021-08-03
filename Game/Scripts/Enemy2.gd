@@ -31,7 +31,7 @@ onready var Sprite_var : Sprite = $Sprite
 onready var RayCast2DLeft : RayCast2D = $RayCast2DLeft
 onready var RayCast2DRight : RayCast2D = $RayCast2DRight
 onready var Sounds = get_node('/root/MainScene/Sounds')
-onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
+onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Label')
 onready var BULLET : Object = preload("res://Scenes/Bullet_enemy.tscn")
 onready var Position2DShooter : Position2D = $Position2DBullet
 onready var Position2DShooter2 : Position2D = $Position2DBullet2
@@ -42,7 +42,7 @@ var test : bool
 
 var shoot_direction : Vector2
 
-onready var VisibilityNotifier2D_ = $VisibilityNotifier2D
+onready var VisibilityNotifier2D_ = $VisibilityEnabler2D
 
 func _set_bullet_direction():
 	shoot_direction = (shoot_position - self.get_global_position()).normalized()

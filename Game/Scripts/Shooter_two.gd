@@ -11,10 +11,10 @@ onready var Utility = preload("res://Scripts/Utility.gd").new()
 onready var BULLET : Object = preload("res://Scenes/Bullet_enemy.tscn")
 
 onready var Sounds = get_node('/root/MainScene/Sounds')
-onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
+onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Label')
 onready var Camera2D = get_node('/root/MainScene/Camera2D')
 
-onready var VisibilityNotifier2D_ = $VisibilityNotifier2D
+onready var VisibilityNotifier2D_ = $VisibilityEnabler2D
 
 var aim_direction
 

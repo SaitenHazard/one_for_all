@@ -27,6 +27,9 @@ texture = ExtResource( 1 )
 wait_time = 2.0
 one_shot = true
 autostart = true
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+freeze_bodies = false
 [connection signal="body_entered" from="." to="." method="_on_Enemy_bullet_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_Enemy_bullet_body_exited"]
 [connection signal="timeout" from="Lifetime" to="." method="_on_Lifetime_timeout"]

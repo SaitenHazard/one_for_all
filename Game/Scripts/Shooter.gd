@@ -13,9 +13,9 @@ var shoot_direction
 
 const SPEED : float = 500.0
 
-onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Enemies/Label')
+onready var Enemy_count = get_node('/root/MainScene/Camera2D/CanvasLayer/Control/Label')
 
-onready var VisibilityNotifier2D_ = $VisibilityNotifier2D
+onready var VisibilityNotifier2D_ = $VisibilityEnabler2D
 
 func _ready():
 	shoot_position = Position2DShooter.get_global_position()
