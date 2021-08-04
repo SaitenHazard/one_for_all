@@ -3,13 +3,15 @@ extends Label
 onready var Player = get_node('/root/MainScene/Player')
 
 var SAVE_DIR = "user://saves/"
-var save_path = "/save.dat"
+var save_path = SAVE_DIR + "/save.dat"
 
 func _ready():
 	_set_time()
 	
 func _set_time():
 	var elapsed = _get_last_best_time()
+	print(elapsed)
+	
 	var hours = floor(elapsed / (3600))
 	var minutes = ((elapsed - (hours * 3600)))/60
 	var seconds = elapsed % 60

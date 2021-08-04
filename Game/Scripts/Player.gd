@@ -18,7 +18,7 @@ const BULLET_SPAWN_DISTANCE : float = 5.0
 const RECOIL_TIME : float = 2.5
 const ARROW_JUMP_DISTANCE : float = 60.0
 
-export var shots_max : int = 4
+export var shots_max : int = 1
 
 var got_hit : bool = false
 var in_recoil : bool = false

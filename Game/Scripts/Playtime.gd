@@ -7,7 +7,7 @@ onready var Player = get_node('/root/MainScene/Player')
 onready var Enemy_count = self.get_parent().get_node('Label')
 
 var SAVE_DIR = "user://saves/"
-var save_path = "/save.dat"
+var save_path = SAVE_DIR+"/save.dat"
 
 var start : bool = false
 var started : bool = false
@@ -42,8 +42,6 @@ func _save() -> void:
 	if not _is_new_best_time():
 		return
 		
-	print('in2')
-	
 	var data = {
 		"time" : elapsed
 	}
